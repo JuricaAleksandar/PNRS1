@@ -24,10 +24,6 @@ public class AddActivity extends AppCompatActivity {
         final Button yellowButton = (Button) findViewById(R.id.buttonYellow);
         final Button redButton = (Button) findViewById(R.id.buttonRed);
 
-        greenButton.setBackgroundColor(Color.rgb(30,154,30));
-        redButton.setBackgroundColor(Color.rgb(204,0,0));
-        yellowButton.setBackgroundColor(Color.rgb(255,194,0));
-
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,9 +39,9 @@ public class AddActivity extends AppCompatActivity {
         greenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                greenButton.setBackgroundColor(Color.rgb(170,255,170));
-                redButton.setBackgroundColor(Color.rgb(204,0,0));
-                yellowButton.setBackgroundColor(Color.rgb(255,194,0));
+                greenButton.setBackgroundResource(R.color.greenButtonPressed);
+                redButton.setBackgroundResource(R.color.redButton);
+                yellowButton.setBackgroundResource(R.color.yellowButton);
                 greenButton.setEnabled(false);
                 redButton.setEnabled(true);
                 yellowButton.setEnabled(true);
@@ -54,9 +50,9 @@ public class AddActivity extends AppCompatActivity {
         yellowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                greenButton.setBackgroundColor(Color.rgb(30,154,30));
-                redButton.setBackgroundColor(Color.rgb(204,0,0));
-                yellowButton.setBackgroundColor(Color.rgb(255,224,130));
+                greenButton.setBackgroundResource(R.color.greenButton);
+                redButton.setBackgroundResource(R.color.redButton);
+                yellowButton.setBackgroundResource(R.color.yellowButtonPressed);
                 greenButton.setEnabled(true);
                 redButton.setEnabled(true);
                 yellowButton.setEnabled(false);
@@ -65,9 +61,9 @@ public class AddActivity extends AppCompatActivity {
         redButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                greenButton.setBackgroundColor(Color.rgb(30,154,30));
-                redButton.setBackgroundColor(Color.rgb(255,170,170));
-                yellowButton.setBackgroundColor(Color.rgb(255,194,0));
+                greenButton.setBackgroundResource(R.color.greenButton);
+                redButton.setBackgroundResource(R.color.redButtonPressed);
+                yellowButton.setBackgroundResource(R.color.yellowButton);
                 greenButton.setEnabled(true);
                 redButton.setEnabled(false);
                 yellowButton.setEnabled(true);

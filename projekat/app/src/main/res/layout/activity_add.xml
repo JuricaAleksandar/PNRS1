@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:text="Ime zadatka"
+                android:hint="Ime zadatka"
                 android:ems="10"
                 android:id="@+id/editText1"
                 android:layout_weight="1"
@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:text="Opis zadatka"
+                android:hint="Opis zadatka"
                 android:ems="10"
                 android:id="@+id/editText3"
                 android:layout_weight="1"
@@ -59,21 +59,24 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/redButton"/>
 
         <Button
             android:id="@+id/buttonYellow"
             style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/yellowButton"/>
 
         <Button
             android:id="@+id/buttonGreen"
             style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/greenButton"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
