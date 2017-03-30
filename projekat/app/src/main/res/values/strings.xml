@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Task Manager</string>
+    <string name="buttonAddTaskText">New Task</string>
+    <string name="buttonStatisticsText">Statistics</string>
+    <string name="editTaskNameText">Task name</string>
+    <string name="editTaskDescText">Task description</string>
+    <string name="textViewTimeText">Pick task time (click here)</string>
+    <string name="textViewDateText">Pick task date (click here)</string>
+    <string name="checkBoxRemindText">Remind me 15 minutes before end</string>
+    <string name="buttonRedText">High</string>
+    <string name="buttonYellowText">Medium</string>
+    <string name="buttonGreenText">Low</string>
+    <string name="buttonAddText">Add</string>
+    <string name="buttonCancelText">Cancel</string>
 </resources>

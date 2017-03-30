@@ -9,46 +9,65 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ra47_2014.pnrs1.rtrk.taskmanager.AddActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/yellowBgd">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="vertical"
         android:layout_weight="1">
 
-        <LinearLayout
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:inputType="textPersonName"
+            android:hint="@string/editTaskNameText"
+            android:ems="10"
+            android:id="@+id/editTaskName"
+            android:layout_weight="1"
+            android:textAlignment="center" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="Ime zadatka"
-                android:ems="10"
-                android:id="@+id/editText1"
-                android:layout_weight="1"
-                android:textAlignment="center" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="@string/editTaskDescText"
+            android:ems="10"
+            android:id="@+id/editTaskDesc"
+            android:layout_weight="1"
+            android:textAlignment="center" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="Opis zadatka"
-                android:ems="10"
-                android:id="@+id/editText3"
-                android:layout_weight="1"
-                android:textAlignment="center" />
+        <TextView
+            android:id="@+id/textViewTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:text="@string/textViewTimeText"
+            android:textAlignment="center"
+            android:textSize="21sp"
+            android:textStyle="bold" />
 
-            <CheckBox
-                android:text="Podseti me 15 minuta pre isteka"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/checkBox"
-                android:layout_weight="1" />
-        </LinearLayout>
-    </ScrollView>
+        <TextView
+            android:id="@+id/textViewDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:text="@string/textViewDateText"
+            android:textAlignment="center"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+
+        <CheckBox
+            android:text="@string/checkBoxRemindText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBoxRemind"
+            android:layout_weight="1"
+            android:textSize="17sp"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,7 +79,10 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:background="@color/redButton"/>
+            android:background="@color/redButton"
+            android:text="@string/buttonRedText"
+            android:textAllCaps="false"
+            android:textSize="17sp" />
 
         <Button
             android:id="@+id/buttonYellow"
@@ -68,7 +90,10 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:background="@color/yellowButton"/>
+            android:background="@color/yellowButton"
+            android:text="@string/buttonYellowText"
+            android:textAllCaps="false"
+            android:textSize="17sp" />
 
         <Button
             android:id="@+id/buttonGreen"
@@ -76,7 +101,10 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:background="@color/greenButton"/>
+            android:background="@color/greenButton"
+            android:text="@string/buttonGreenText"
+            android:textAllCaps="false"
+            android:textSize="17sp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -88,8 +116,9 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:text="Dodaj"
-            android:textAllCaps="false" />
+            android:text="@string/buttonAddText"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/buttonCancel"
@@ -97,7 +126,8 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:text="Otkazi"
-            android:textAllCaps="false" />
+            android:text="@string/buttonCancelText"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
     </LinearLayout>
 </LinearLayout>

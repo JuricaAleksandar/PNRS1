@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#666666</color>
-    <color name="colorPrimaryDark">#222222</color>
-    <color name="colorAccent">#666666</color>
+    <color name="colorPrimary">#111111</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#887D5D</color>
     <color name="greenButton">#1E9A1E</color>
-    <color name="greenButtonPressed">#AAFFAA</color>
+    <color name="greenButtonPressed">#8FC264</color>
     <color name="yellowButton">#FFC200</color>
-    <color name="yellowButtonPressed">#FFE082</color>
+    <color name="yellowButtonPressed">#FFD655</color>
     <color name="redButton">#CC0000</color>
-    <color name="redButtonPressed">#FFAAAA</color>
+    <color name="redButtonPressed">#E67555</color>
+    <color name="yellowBgd">#FFE9A9</color>
 </resources>

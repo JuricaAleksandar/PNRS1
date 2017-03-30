@@ -14,8 +14,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final Intent addIntent = new Intent(this,AddActivity.class);
         final Intent statisticsIntent = new Intent(this,StatisticActivity.class);
-        final Button addB = (Button) findViewById(R.id.addButton);
-        final Button statB = (Button) findViewById(R.id.statisticsButton);
+        final Button addB = (Button) findViewById(R.id.buttonAddTask);
+        final Button statB = (Button) findViewById(R.id.buttonStatistics);
         addB.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
