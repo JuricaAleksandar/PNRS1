@@ -10,6 +10,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -28,13 +29,28 @@ public class AddActivity extends AppCompatActivity {
         final Button greenButton = (Button) findViewById(R.id.buttonGreen);
         final Button yellowButton = (Button) findViewById(R.id.buttonYellow);
         final Button redButton = (Button) findViewById(R.id.buttonRed);
+        final EditText taskName = (EditText) findViewById(R.id.editTaskName);
+        final EditText taskDesc = (EditText) findViewById(R.id.editTaskDesc);
         final TextView timePick = (TextView) findViewById(R.id.textViewTime);
         final TextView datePick = (TextView) findViewById(R.id.textViewDate);
 
         addButton.setOnClickListener(new View.OnClickListener() {
+            String tmp1 = "Pick task time (click here)";
+            String tmp2 = "Pick task date (click here)";
             @Override
             public void onClick(View v) {
-                startActivity(toMain);
+                if(taskName.getText().toString().isEmpty())
+                    taskName.requestFocus();
+                else if(taskDesc.getText().toString().isEmpty())
+                    taskDesc.requestFocus();
+                else if(timePick.getText().toString().equals(tmp1))
+                    timePick.callOnClick();
+                else if(datePick.getText().toString().equals(tmp2))
+                    datePick.callOnClick();
+                else if(redButton.isEnabled() && yellowButton.isEnabled() && greenButton.isEnabled())
+                    greenButton.callOnClick();
+                else
+                    startActivity(toMain);
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {

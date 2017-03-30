@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Task Manager</string>
     <string name="buttonAddTaskText">New Task</string>
-    <string name="buttonStatisticsText">Statistics</string>
+    <string name="buttonStatisticsText">Statistic</string>
     <string name="editTaskNameText">Task name</string>
     <string name="editTaskDescText">Task description</string>
     <string name="textViewTimeText">Pick task time (click here)</string>
