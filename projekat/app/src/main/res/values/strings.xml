@@ -12,4 +12,6 @@
     <string name="buttonGreenText">Low</string>
     <string name="buttonAddText">Add</string>
     <string name="buttonCancelText">Cancel</string>
+    <string name="selectTimeTitle">Select task time:</string>
+    <string name="selectDateTitle">Select task date:</string>
 </resources>

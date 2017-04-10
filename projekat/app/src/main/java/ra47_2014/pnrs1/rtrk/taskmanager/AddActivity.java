@@ -35,17 +35,15 @@ public class AddActivity extends AppCompatActivity {
         final TextView datePick = (TextView) findViewById(R.id.textViewDate);
 
         addButton.setOnClickListener(new View.OnClickListener() {
-            String tmp1 = "Pick task time (click here)";
-            String tmp2 = "Pick task date (click here)";
             @Override
             public void onClick(View v) {
                 if(taskName.getText().toString().isEmpty())
                     taskName.requestFocus();
                 else if(taskDesc.getText().toString().isEmpty())
                     taskDesc.requestFocus();
-                else if(timePick.getText().toString().equals(tmp1))
+                else if(timePick.getText().toString().equals(getString(R.string.textViewTimeText)))
                     timePick.callOnClick();
-                else if(datePick.getText().toString().equals(tmp2))
+                else if(datePick.getText().toString().equals(getString(R.string.textViewDateText)))
                     datePick.callOnClick();
                 else if(redButton.isEnabled() && yellowButton.isEnabled() && greenButton.isEnabled())
                     greenButton.callOnClick();
@@ -133,7 +131,7 @@ public class AddActivity extends AppCompatActivity {
                         }
                     }
                 },currentHour,currentMinute,true);
-                timePickerDialog.setTitle("Select task time:");
+                timePickerDialog.setTitle(R.string.selectTimeTitle);
                 timePickerDialog.show();
             }
         });
@@ -157,7 +155,7 @@ public class AddActivity extends AppCompatActivity {
                             datePick.setText(currentDay + "." + (currentMonth + 1) + "." + currentYear + ".");
                     }
                 },currentYear,currentMonth,currentDay);
-                datePickerDialog.setTitle("Select task date: ");
+                datePickerDialog.setTitle(R.string.selectDateTitle);
                 datePickerDialog.show();
             }
         });
