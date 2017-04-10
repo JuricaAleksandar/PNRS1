@@ -5,11 +5,11 @@ package ra47_2014.pnrs1.rtrk.taskmanager;
  */
 
 public class Task {
-    public int mName;
-    public int mPriorityImage;
+    public String mName;
+    public int mPriority;
 
-    public Task(int name, int drawable) {
+    public Task(String name, int priority) {
         mName = name;
-        mPriorityImage = drawable;
+        mPriority = priority;
     }
 }

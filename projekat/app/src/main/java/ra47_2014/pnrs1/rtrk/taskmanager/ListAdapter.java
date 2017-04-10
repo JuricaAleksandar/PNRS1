@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -59,21 +60,21 @@ public class ListAdapter extends BaseAdapter {
                     Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.task_element, null);
             ViewHolder holder = new ViewHolder();
-            holder.image = (ImageView) view.findViewById(R.id.image);
-            holder.name = (TextView) view.findViewById(R.id.textViewDate);
+            holder.priority = (LinearLayout) view.findViewById(R.id.lvPriority);
+            holder.name = (TextView) view.findViewById(R.id.lvTaskName);
             view.setTag(holder);
         }
 
         Task task = (Task) getItem(position);
         ViewHolder holder = (ViewHolder) view.getTag();
-        holder.image.setImageResource(task.mPriorityImage);
+        holder.priority.setBackgroundResource(task.mPriority);
         holder.name.setText(task.mName);
 
         return view;
     }
 
     private class ViewHolder {
-        public ImageView image = null;
+        public LinearLayout priority = null;
         public TextView name = null;
     }
 }
