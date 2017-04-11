@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -62,6 +62,8 @@ public class ListAdapter extends BaseAdapter {
             ViewHolder holder = new ViewHolder();
             holder.priority = (LinearLayout) view.findViewById(R.id.lvPriority);
             holder.name = (TextView) view.findViewById(R.id.lvTaskName);
+            holder.date = (TextView) view.findViewById(R.id.lvTaskDate);
+            holder.done = (CheckBox) view.findViewById(R.id.lvDone);
             view.setTag(holder);
         }
 
@@ -69,6 +71,7 @@ public class ListAdapter extends BaseAdapter {
         ViewHolder holder = (ViewHolder) view.getTag();
         holder.priority.setBackgroundResource(task.mPriority);
         holder.name.setText(task.mName);
+        holder.date.setText(task.mDate);
 
         return view;
     }
@@ -76,5 +79,7 @@ public class ListAdapter extends BaseAdapter {
     private class ViewHolder {
         public LinearLayout priority = null;
         public TextView name = null;
+        public TextView date = null;
+        public CheckBox done = null;
     }
 }

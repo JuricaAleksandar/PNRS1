@@ -34,6 +34,8 @@ public class AddActivity extends AppCompatActivity {
         final TextView timePick = (TextView) findViewById(R.id.textViewTime);
         final TextView datePick = (TextView) findViewById(R.id.textViewDate);
 
+        addButton.setText(getIntent().getIntExtra("B1",0));
+        cancelButton.setText(getIntent().getIntExtra("B2",0));
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

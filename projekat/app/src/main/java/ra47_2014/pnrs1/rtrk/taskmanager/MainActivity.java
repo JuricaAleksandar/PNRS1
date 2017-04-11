@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -20,10 +21,21 @@ public class MainActivity extends AppCompatActivity {
         final Button addB = (Button) findViewById(R.id.buttonAddTask);
         final Button statB = (Button) findViewById(R.id.buttonStatistics);
         listView.setAdapter(adapter);
-        adapter.addTask(new Task(getString(R.string.buttonAddText),R.color.yellowButton));
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                addIntent.putExtra("B1",R.string.buttonSaveText);
+                addIntent.putExtra("B2",R.string.buttonDeleteText);
+                startActivity(addIntent);
+                return true;
+            }
+        });
+        adapter.addTask(new Task("Zadatak opaopa", "11:30", "25.4.2017.", R.color.yellowButton, true));
         addB.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                addIntent.putExtra("B1",R.string.buttonAddText);
+                addIntent.putExtra("B2",R.string.buttonCancelText);
                 startActivity(addIntent);
             }
         });
