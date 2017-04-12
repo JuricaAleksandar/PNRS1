@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,6 +19,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class AddActivity extends AppCompatActivity {
+
+    private int EDIT_TASK = 0;
+    private int ADD_TASK = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +37,8 @@ public class AddActivity extends AppCompatActivity {
         final EditText taskDesc = (EditText) findViewById(R.id.editTaskDesc);
         final TextView timePick = (TextView) findViewById(R.id.textViewTime);
         final TextView datePick = (TextView) findViewById(R.id.textViewDate);
+        final CheckBox reminder = (CheckBox) findViewById(R.id.checkBoxRemind);
 
-        addButton.setText(getIntent().getIntExtra("B1",0));
-        cancelButton.setText(getIntent().getIntExtra("B2",0));
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,14 +52,50 @@ public class AddActivity extends AppCompatActivity {
                     datePick.callOnClick();
                 else if(redButton.isEnabled() && yellowButton.isEnabled() && greenButton.isEnabled())
                     greenButton.callOnClick();
-                else
-                    startActivity(toMain);
+                else{
+
+                    int priority;
+
+                    if(!greenButton.isEnabled())
+                        priority = R.color.greenButton;
+                    else if(!yellowButton.isEnabled())
+                        priority = R.color.yellowButton;
+                    else
+                        priority = R.color.redButton;
+
+                    Bundle bundle = new Bundle();
+                    Task task = new Task(taskName.getText().toString(),timePick.getText().toString(),
+                            datePick.getText().toString(),taskDesc.getText().toString(),
+                            priority,reminder.isChecked());
+                    bundle.putSerializable("Task",task);
+                    toMain.putExtra("Task",bundle);
+                    if (getIntent().getIntExtra("requestCode",0)==EDIT_TASK) {
+                        toMain.putExtra("Button", "Left");
+                        toMain.putExtra("Position", getIntent().getIntExtra("Position", 0));
+                    }
+                    if (getParent() == null) {
+                        setResult(RESULT_OK,toMain);
+                    } else {
+                        getParent().setResult(RESULT_OK,toMain);
+                    }
+                    finish();
+                }
+
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(toMain);
+                if (getIntent().getIntExtra("requestCode", 0) == EDIT_TASK){
+                    toMain.putExtra("Button", "Right");
+                    toMain.putExtra("Position", getIntent().getIntExtra("Position", 0));
+                }
+                if (getParent() == null) {
+                    setResult(RESULT_OK,toMain);
+                } else {
+                    getParent().setResult(RESULT_OK,toMain);
+                }
+                finish();
             }
         });
         greenButton.setOnClickListener(new View.OnClickListener() {
@@ -161,5 +200,30 @@ public class AddActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+
+        addButton.setText(getIntent().getIntExtra("B1",0));
+        cancelButton.setText(getIntent().getIntExtra("B2",0));
+
+        if(getIntent().getIntExtra("requestCode",0)==EDIT_TASK){
+            Bundle bundle = getIntent().getBundleExtra("Task");
+            Task task = (Task)bundle.get("Task");
+            taskName.setText(task.mName);
+            taskDesc.setText(task.mDescription);
+            timePick.setText(task.mTime);
+            datePick.setText(task.mDate);
+            reminder.setChecked(task.mReminder);
+
+            switch (task.mPriority){
+                case R.color.redButton:
+                    redButton.callOnClick();
+                    break;
+                case R.color.yellowButton:
+                    yellowButton.callOnClick();
+                    break;
+                default:
+                    greenButton.callOnClick();
+                    break;
+            }
+        }
     }
 }

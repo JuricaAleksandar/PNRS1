@@ -33,6 +33,16 @@ public class ListAdapter extends BaseAdapter {
         mTaskList.add(task);
         notifyDataSetChanged();
     }
+    public void removeTask(int position){
+        mTaskList.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void editTask(int position,Task task){
+        mTaskList.remove(position);
+        mTaskList.add(position,task);
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getCount() {
