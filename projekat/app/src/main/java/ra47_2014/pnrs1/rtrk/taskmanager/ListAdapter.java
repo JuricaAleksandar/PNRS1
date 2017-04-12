@@ -1,11 +1,15 @@
 package ra47_2014.pnrs1.rtrk.taskmanager;
 
 import android.content.Context;
+import android.graphics.Paint;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,7 +26,7 @@ public class ListAdapter extends BaseAdapter {
 
     public ListAdapter(Context context){
         mContext=context;
-        mTaskList=new ArrayList<Task>();
+        mTaskList=new ArrayList<>();
     }
 
     public void addTask(Task task){
@@ -60,18 +64,36 @@ public class ListAdapter extends BaseAdapter {
                     Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.task_element, null);
             ViewHolder holder = new ViewHolder();
-            holder.priority = (LinearLayout) view.findViewById(R.id.lvPriority);
+            holder.priority = (LinearLayout) view.findViewById(R.id.lvTaskPriority);
+            holder.time = (TextView) view.findViewById(R.id.lvTaskTime);
             holder.name = (TextView) view.findViewById(R.id.lvTaskName);
             holder.date = (TextView) view.findViewById(R.id.lvTaskDate);
-            holder.done = (CheckBox) view.findViewById(R.id.lvDone);
+            holder.done = (CheckBox) view.findViewById(R.id.lvTaskDone);
+            holder.reminder = (ImageView) view.findViewById(R.id.lvTastReminder);
             view.setTag(holder);
         }
 
         Task task = (Task) getItem(position);
-        ViewHolder holder = (ViewHolder) view.getTag();
+        final ViewHolder holder = (ViewHolder) view.getTag();
         holder.priority.setBackgroundResource(task.mPriority);
         holder.name.setText(task.mName);
         holder.date.setText(task.mDate);
+        holder.time.setText(task.mTime);
+        holder.done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(holder.done.isChecked())
+                    holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                else
+                    holder.name.setPaintFlags(holder.name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+            }
+        });
+        holder.reminder.setImageResource(R.drawable.reminder);
+        if(task.mReminder)
+            holder.reminder.setVisibility(View.VISIBLE);
+        else
+            holder.reminder.setVisibility(View.INVISIBLE);
+
 
         return view;
     }
@@ -80,6 +102,8 @@ public class ListAdapter extends BaseAdapter {
         public LinearLayout priority = null;
         public TextView name = null;
         public TextView date = null;
+        public TextView time = null;
         public CheckBox done = null;
+        public ImageView reminder = null;
     }
 }

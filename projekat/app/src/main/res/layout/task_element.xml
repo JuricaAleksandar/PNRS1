@@ -1,52 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/yellowBgd">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:longClickable="true"
+    android:background="@color/yellowBgd"
+    android:layout_height="wrap_content">
+
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:orientation="horizontal"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:background="@color/redButton"
-        android:layout_weight="1"
-        android:id="@+id/lvPriority">
+        android:weightSum="10">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:id="@+id/lvTaskPriority">
+        </LinearLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:id="@+id/lvTaskName"
+            android:textStyle="normal|bold" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:weightSum="2"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                >
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:id="@+id/lvTaskDate"
+                    android:textStyle="normal|bold" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:id="@+id/lvTaskTime"
+                    android:textStyle="normal|bold" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/lvTastReminder"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/lvTaskDone"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <RelativeLayout
-        android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_weight="10"
-        android:layout_height="match_parent">
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:id="@+id/lvDone"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/lvTaskName"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="0dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:id="@+id/lvTaskDate"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/lvTaskName"
-            android:layout_marginStart="23dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:id="@+id/lvTaskName"
-            android:textSize="15sp"
-            android:layout_below="@+id/lvTaskDate"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="14dp"
-            android:layout_marginBottom="0dp"/>
-
-    </RelativeLayout>
-
 </LinearLayout>
+<!--
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/yellowBgd"
+        android:longClickable="true">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/redButton"
+            android:layout_weight="1"
+            android:id="@+id/lvPriority">
+        </LinearLayout>
+
+        <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="10"
+            android:layout_height="match_parent">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:id="@+id/lvDone"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/lvTaskName"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="0dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/lvTaskDate"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/lvTaskName"
+                android:layout_marginStart="23dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/lvTaskName"
+                android:textSize="15sp"
+                android:layout_below="@+id/lvTaskDate"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="14dp"
+                android:layout_marginBottom="0dp"/>
+
+        </RelativeLayout>
+
+</LinearLayout>-->

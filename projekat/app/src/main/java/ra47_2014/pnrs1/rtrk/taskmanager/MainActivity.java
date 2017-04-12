@@ -30,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        adapter.addTask(new Task("Zadatak opaopa", "11:30", "25.4.2017.", R.color.yellowButton, true));
+        adapter.addTask(new Task("Zadatak 1", "10:30", "25.4.2017.", R.color.yellowButton, true));
+        adapter.addTask(new Task("Zadatak 2", "11:30", "25.4.2017.", R.color.greenButton, false));
         addB.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
