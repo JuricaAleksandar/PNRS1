@@ -232,10 +232,9 @@ public class AddActivity extends AppCompatActivity {
                                             break;
 
                                     }
-                                }
+                                } else
+                                    datePick.setText(dayOfMonth + "." + (month + 1) + "." + year + ".");
                             }
-                            else
-                                datePick.setText(dayOfMonth + "." + (month + 1) + "." + year + ".");
                         }
                         else {
                             /*datePick.setText(currentDate.get(Calendar.DAY_OF_MONTH) + "."
