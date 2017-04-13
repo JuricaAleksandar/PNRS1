@@ -17,9 +17,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ADD_TASK && resultCode == RESULT_OK) {
-            Bundle bundle = data.getBundleExtra("Task");
-            Task task = (Task)bundle.get("Task");
-            adapter.addTask(task);
+            if (data.getStringExtra("Button").equals("Left")){
+                Bundle bundle = data.getBundleExtra("Task");
+                Task task = (Task) bundle.get("Task");
+                adapter.addTask(task);
+            }
         }
         else if(requestCode == EDIT_TASK && resultCode == RESULT_OK) {
             if (data.getStringExtra("Button").equals("Left")) {

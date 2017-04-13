@@ -68,15 +68,20 @@ public class AddActivity extends AppCompatActivity {
                             priority,reminder.isChecked());
                     bundle.putSerializable("Task",task);
                     toMain.putExtra("Task",bundle);
-                    if (getIntent().getIntExtra("requestCode",0)==EDIT_TASK) {
-                        toMain.putExtra("Button", "Left");
+                    toMain.putExtra("Button", "Left");
+                    int toastText;
+                    if (getIntent().getIntExtra("requestCode",0)==EDIT_TASK){
                         toMain.putExtra("Position", getIntent().getIntExtra("Position", 0));
-                    }
+                        toastText=R.string.changesSaved;
+                    }else
+                        toastText=R.string.taskCreated;
                     if (getParent() == null) {
                         setResult(RESULT_OK,toMain);
                     } else {
                         getParent().setResult(RESULT_OK,toMain);
                     }
+                    Toast toast = Toast.makeText(getApplicationContext(),toastText, Toast.LENGTH_SHORT);
+                    toast.show();
                     finish();
                 }
 
@@ -85,14 +90,17 @@ public class AddActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                toMain.putExtra("Button", "Right");
                 if (getIntent().getIntExtra("requestCode", 0) == EDIT_TASK){
-                    toMain.putExtra("Button", "Right");
                     toMain.putExtra("Position", getIntent().getIntExtra("Position", 0));
+                    Toast toast = Toast.makeText(getApplicationContext(),R.string.taskDeleted, Toast.LENGTH_SHORT);
+                    toast.show();
+
                 }
                 if (getParent() == null) {
                     setResult(RESULT_OK,toMain);
                 } else {
-                    getParent().setResult(RESULT_OK,toMain);
+                    getParent().setResult(RESULT_OK, toMain);
                 }
                 finish();
             }
@@ -193,17 +201,47 @@ public class AddActivity extends AppCompatActivity {
                         chosenDateAndTime.set(year,month,dayOfMonth,
                                 chosenDateAndTime.get(Calendar.HOUR_OF_DAY),chosenDateAndTime.get(Calendar.MINUTE));
                         if (chosenDateAndTime.compareTo(currentDate)>=0) {
-                            if (chosenDateAndTime.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR))
+                            if (chosenDateAndTime.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR)) {
                                 if (chosenDateAndTime.get(Calendar.DAY_OF_YEAR) == currentDate.get(Calendar.DAY_OF_YEAR))
                                     datePick.setText(R.string.today);
+                                else if (chosenDateAndTime.get(Calendar.DAY_OF_YEAR) - currentDate.get(Calendar.DAY_OF_YEAR) == 1)
+                                    datePick.setText(R.string.tomorrow);
+                                else if (chosenDateAndTime.get(Calendar.DAY_OF_YEAR) - currentDate.get(Calendar.DAY_OF_YEAR) >= 2 &&
+                                        chosenDateAndTime.get(Calendar.DAY_OF_YEAR) - currentDate.get(Calendar.DAY_OF_YEAR) < 7) {
+                                    switch (chosenDateAndTime.get(Calendar.DAY_OF_WEEK)) {
+                                        case Calendar.MONDAY:
+                                            datePick.setText(R.string.monday);
+                                            break;
+                                        case Calendar.TUESDAY:
+                                            datePick.setText(R.string.tuesday);
+                                            break;
+                                        case Calendar.WEDNESDAY:
+                                            datePick.setText(R.string.wednesday);
+                                            break;
+                                        case Calendar.THURSDAY:
+                                            datePick.setText(R.string.thursday);
+                                            break;
+                                        case Calendar.FRIDAY:
+                                            datePick.setText(R.string.friday);
+                                            break;
+                                        case Calendar.SATURDAY:
+                                            datePick.setText(R.string.saturday);
+                                            break;
+                                        case Calendar.SUNDAY:
+                                            datePick.setText(R.string.sunday);
+                                            break;
+
+                                    }
+                                }
+                            }
                             else
                                 datePick.setText(dayOfMonth + "." + (month + 1) + "." + year + ".");
                         }
                         else {
-                            datePick.setText(currentDate.get(Calendar.DAY_OF_MONTH) + "."
+                            /*datePick.setText(currentDate.get(Calendar.DAY_OF_MONTH) + "."
                                     + (currentDate.get(Calendar.MONTH) + 1)
-                                    + "." + currentDate.get(Calendar.YEAR) + ".");
-
+                                    + "." + currentDate.get(Calendar.YEAR) + ".");*/
+                            datePick.setText(R.string.today);
                             if(chosenDateAndTime.getTimeInMillis()-currentDate.getTimeInMillis()<-60000) {
                                 Toast toast = Toast.makeText(getApplicationContext(), R.string.timeDateError, Toast.LENGTH_SHORT);
                                 toast.show();
