@@ -16,4 +16,7 @@
     <string name="selectDateTitle">Select task date:</string>
     <string name="buttonSaveText">Save</string>
     <string name="buttonDeleteText">Delete</string>
+    <string name="timeDateError">Time travel not possible!</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
 </resources>

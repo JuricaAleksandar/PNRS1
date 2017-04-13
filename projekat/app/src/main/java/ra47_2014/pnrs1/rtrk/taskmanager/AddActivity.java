@@ -3,10 +3,8 @@ package ra47_2014.pnrs1.rtrk.taskmanager;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,15 +12,15 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class AddActivity extends AppCompatActivity {
 
     private int EDIT_TASK = 0;
     private int ADD_TASK = 1;
-
+    protected Calendar chosenDateAndTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +36,7 @@ public class AddActivity extends AppCompatActivity {
         final TextView timePick = (TextView) findViewById(R.id.textViewTime);
         final TextView datePick = (TextView) findViewById(R.id.textViewDate);
         final CheckBox reminder = (CheckBox) findViewById(R.id.checkBoxRemind);
+        chosenDateAndTime=Calendar.getInstance();
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,16 +134,15 @@ public class AddActivity extends AppCompatActivity {
         timePick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Calendar chosenTime = Calendar.getInstance();
                 final Calendar currentTime = Calendar.getInstance();
-                final int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-                final int currentMinute = currentTime.get(Calendar.MINUTE);
                 final TimePickerDialog timePickerDialog;
                 timePickerDialog = new TimePickerDialog(AddActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        chosenTime.set(chosenTime.get(Calendar.YEAR),chosenTime.get(Calendar.MONTH),chosenTime.get(Calendar.DAY_OF_MONTH),hourOfDay,minute);
-                        if (chosenTime.compareTo(currentTime)>=0) {
+                        chosenDateAndTime.set(chosenDateAndTime.get(Calendar.YEAR),
+                                chosenDateAndTime.get(Calendar.MONTH),
+                                chosenDateAndTime.get(Calendar.DAY_OF_MONTH),hourOfDay,minute);
+                        if (chosenDateAndTime.compareTo(currentTime)>=0) {
                             if (hourOfDay < 10) {
                                 if (minute < 10)
                                     timePick.setText("0" + hourOfDay + ":0" + minute);
@@ -158,6 +156,8 @@ public class AddActivity extends AppCompatActivity {
                             }
                         }
                         else{
+                            int currentHour=currentTime.get(Calendar.HOUR_OF_DAY);
+                            int currentMinute=currentTime.get(Calendar.MINUTE);
                             if (currentHour < 10) {
                                 if (currentMinute < 10)
                                     timePick.setText("0" + currentHour + ":0" + currentMinute);
@@ -169,9 +169,14 @@ public class AddActivity extends AppCompatActivity {
                                 else
                                     timePick.setText(currentHour + ":" + currentMinute);
                             }
+                            if(chosenDateAndTime.getTimeInMillis()-currentTime.getTimeInMillis()<-60000){
+                                Toast toast = Toast.makeText(getApplicationContext(),R.string.timeDateError, Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                            chosenDateAndTime=Calendar.getInstance();
                         }
                     }
-                },currentHour,currentMinute,true);
+                },chosenDateAndTime.get(Calendar.HOUR_OF_DAY),chosenDateAndTime.get(Calendar.MINUTE),true);
                 timePickerDialog.setTitle(R.string.selectTimeTitle);
                 timePickerDialog.show();
             }
@@ -181,21 +186,33 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final Calendar currentDate = Calendar.getInstance();
-                final Calendar chosenDate = Calendar.getInstance();
-                final int currentDay = currentDate.get(Calendar.DAY_OF_MONTH);
-                final int currentMonth = currentDate.get(Calendar.MONTH);
-                final int currentYear = currentDate.get(Calendar.YEAR);
                 final DatePickerDialog datePickerDialog;
                 datePickerDialog = new DatePickerDialog(AddActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        chosenDate.set(year,month,dayOfMonth);
-                        if (chosenDate.compareTo(currentDate)>=0)
-                            datePick.setText(dayOfMonth + "." + (month + 1) + "." + year + ".");
-                        else
-                            datePick.setText(currentDay + "." + (currentMonth + 1) + "." + currentYear + ".");
+                        chosenDateAndTime.set(year,month,dayOfMonth,
+                                chosenDateAndTime.get(Calendar.HOUR_OF_DAY),chosenDateAndTime.get(Calendar.MINUTE));
+                        if (chosenDateAndTime.compareTo(currentDate)>=0) {
+                            if (chosenDateAndTime.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR))
+                                if (chosenDateAndTime.get(Calendar.DAY_OF_YEAR) == currentDate.get(Calendar.DAY_OF_YEAR))
+                                    datePick.setText(R.string.today);
+                            else
+                                datePick.setText(dayOfMonth + "." + (month + 1) + "." + year + ".");
+                        }
+                        else {
+                            datePick.setText(currentDate.get(Calendar.DAY_OF_MONTH) + "."
+                                    + (currentDate.get(Calendar.MONTH) + 1)
+                                    + "." + currentDate.get(Calendar.YEAR) + ".");
+
+                            if(chosenDateAndTime.getTimeInMillis()-currentDate.getTimeInMillis()<-60000) {
+                                Toast toast = Toast.makeText(getApplicationContext(), R.string.timeDateError, Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                            chosenDateAndTime=Calendar.getInstance();
+                        }
                     }
-                },currentYear,currentMonth,currentDay);
+                },chosenDateAndTime.get(Calendar.YEAR),chosenDateAndTime.get(Calendar.MONTH),
+                        chosenDateAndTime.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.setTitle(R.string.selectDateTitle);
                 datePickerDialog.show();
             }
@@ -203,7 +220,6 @@ public class AddActivity extends AppCompatActivity {
 
         addButton.setText(getIntent().getIntExtra("B1",0));
         cancelButton.setText(getIntent().getIntExtra("B2",0));
-
         if(getIntent().getIntExtra("requestCode",0)==EDIT_TASK){
             Bundle bundle = getIntent().getBundleExtra("Task");
             Task task = (Task)bundle.get("Task");

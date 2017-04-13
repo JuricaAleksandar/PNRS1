@@ -12,62 +12,69 @@
     android:orientation="vertical"
     android:background="@color/yellowBgd">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:fillViewport="true">
 
-        <EditText
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="@string/editTaskNameText"
-            android:ems="10"
-            android:id="@+id/editTaskName"
-            android:layout_weight="1"
-            android:textAlignment="center" />
+            android:orientation="vertical">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="@string/editTaskDescText"
-            android:ems="10"
-            android:id="@+id/editTaskDesc"
-            android:layout_weight="1"
-            android:textAlignment="center" />
+            <EditText
+                android:id="@+id/editTaskName"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/editTaskNameText"
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
 
-        <TextView
-            android:id="@+id/textViewTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:gravity="center"
-            android:text="@string/textViewTimeText"
-            android:textAlignment="center"
-            android:textSize="21sp"
-            android:textStyle="bold" />
+            <EditText
+                android:id="@+id/editTaskDesc"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/editTaskDescText"
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
 
-        <TextView
-            android:id="@+id/textViewDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:gravity="center"
-            android:text="@string/textViewDateText"
-            android:textAlignment="center"
-            android:textSize="21sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/textViewTime"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="@string/textViewTimeText"
+                android:textAlignment="center"
+                android:textSize="21sp"
+                android:textStyle="bold" />
 
-        <CheckBox
-            android:text="@string/checkBoxRemindText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBoxRemind"
-            android:layout_weight="1"
-            android:textSize="17sp"/>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textViewDate"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="@string/textViewDateText"
+                android:textAlignment="center"
+                android:textSize="21sp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/checkBoxRemind"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@string/checkBoxRemindText"
+                android:textSize="17sp" />
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
