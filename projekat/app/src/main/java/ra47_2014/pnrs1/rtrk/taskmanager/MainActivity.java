@@ -10,33 +10,42 @@ import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private int EDIT_TASK=0;
-    private int ADD_TASK=1;
+    public static int EDIT_TASK = 0;
+    public static int ADD_TASK = 1;
+    public static String sendButton1Code = "B1";
+    public static String sendButton2Code = "B2";
+    public static String positionCode = "Position";
+    public static String returnButtonCode = "Button";
+    public static String leftButtonCode = "Left";
+    public static String rightButtonCode = "Right";
+    public static String taskCode = "Task";
+    public static String reqCode = "requestCode";
+
     private ListAdapter adapter = new ListAdapter(MainActivity.this);
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ADD_TASK && resultCode == RESULT_OK) {
-            if (data.getStringExtra("Button").equals("Left")){
-                Bundle bundle = data.getBundleExtra("Task");
-                Task task = (Task) bundle.get("Task");
+            if (data.getStringExtra(returnButtonCode).equals(leftButtonCode)){
+                Bundle bundle = data.getBundleExtra(taskCode);
+                Task task = (Task) bundle.get(taskCode);
                 adapter.addTask(task);
             }
         }
         else if(requestCode == EDIT_TASK && resultCode == RESULT_OK) {
-            if (data.getStringExtra("Button").equals("Left")) {
+            if (data.getStringExtra(returnButtonCode).equals(leftButtonCode)) {
 
-                Bundle bundle = data.getBundleExtra("Task");
-                Task task = (Task) bundle.get("Task");
-                adapter.editTask(data.getIntExtra("Position", 0), task);
+                Bundle bundle = data.getBundleExtra(taskCode);
+                Task task = (Task) bundle.get(taskCode);
+                adapter.editTask(data.getIntExtra(positionCode, 0), task);
 
-            } else if (data.getStringExtra("Button").equals("Right"))
-                adapter.removeTask(data.getIntExtra("Position", 0));
+            } else if (data.getStringExtra(returnButtonCode).equals(rightButtonCode))
+                adapter.removeTask(data.getIntExtra(positionCode, 0));
         }
     }
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
-        intent.putExtra("requestCode", requestCode);
+        intent.putExtra(reqCode, requestCode);
         super.startActivityForResult(intent, requestCode);
     }
 
@@ -56,11 +65,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Task item = (Task)adapter.getItem(position);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("Task",item);
-                addIntent.putExtra("Task",bundle);
-                addIntent.putExtra("B1",R.string.buttonSaveText);
-                addIntent.putExtra("B2",R.string.buttonDeleteText);
-                addIntent.putExtra("Position",position);
+                bundle.putSerializable(taskCode,item);
+                addIntent.putExtra(taskCode,bundle);
+                addIntent.putExtra(sendButton1Code,R.string.buttonSaveText);
+                addIntent.putExtra(sendButton2Code,R.string.buttonDeleteText);
+                addIntent.putExtra(positionCode,position);
                 startActivityForResult(addIntent,EDIT_TASK);
                 return true;
             }
@@ -68,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
         addB.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                addIntent.putExtra("B1",R.string.buttonAddText);
-                addIntent.putExtra("B2",R.string.buttonCancelText);
+                addIntent.putExtra(sendButton1Code,R.string.buttonAddText);
+                addIntent.putExtra(sendButton2Code,R.string.buttonCancelText);
                 startActivityForResult(addIntent,ADD_TASK);
             }
         });

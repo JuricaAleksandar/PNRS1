@@ -18,8 +18,6 @@ import java.util.Calendar;
 
 public class AddActivity extends AppCompatActivity {
 
-    private int EDIT_TASK = 0;
-    private int ADD_TASK = 1;
     protected Calendar chosenDateAndTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +66,9 @@ public class AddActivity extends AppCompatActivity {
                             priority,reminder.isChecked());
                     bundle.putSerializable("Task",task);
                     toMain.putExtra("Task",bundle);
-                    toMain.putExtra("Button", "Left");
+                    toMain.putExtra(MainActivity.returnButtonCode, "Left");
                     int toastText;
-                    if (getIntent().getIntExtra("requestCode",0)==EDIT_TASK){
+                    if (getIntent().getIntExtra("requestCode",0)== MainActivity.EDIT_TASK){
                         toMain.putExtra("Position", getIntent().getIntExtra("Position", 0));
                         toastText=R.string.changesSaved;
                     }else
@@ -90,8 +88,8 @@ public class AddActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toMain.putExtra("Button", "Right");
-                if (getIntent().getIntExtra("requestCode", 0) == EDIT_TASK){
+                toMain.putExtra(MainActivity.returnButtonCode, "Right");
+                if (getIntent().getIntExtra("requestCode", 0) == MainActivity.EDIT_TASK){
                     toMain.putExtra("Position", getIntent().getIntExtra("Position", 0));
                     Toast toast = Toast.makeText(getApplicationContext(),R.string.taskDeleted, Toast.LENGTH_SHORT);
                     toast.show();
@@ -257,7 +255,7 @@ public class AddActivity extends AppCompatActivity {
 
         addButton.setText(getIntent().getIntExtra("B1",0));
         cancelButton.setText(getIntent().getIntExtra("B2",0));
-        if(getIntent().getIntExtra("requestCode",0)==EDIT_TASK){
+        if(getIntent().getIntExtra("requestCode",0) == MainActivity.EDIT_TASK){
             Bundle bundle = getIntent().getBundleExtra("Task");
             Task task = (Task)bundle.get("Task");
             taskName.setText(task.mName);
