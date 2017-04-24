@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">GraphicsExamples</string>
+    <string name="sample_1">Simple Draw Example</string>
+    <string name="sample_2">Basic Graphics Primitives</string>
+    <string name="sample_3">Fill Basic Primitives</string>
+    <string name="sample_4">Show Transformations</string>
+    <string name="sample_5">Show Thick Lines</string>
+    <string name="sample_6">Reaction to Events</string>
+    <string name="sample_7">Threads With Events</string>
+</resources>

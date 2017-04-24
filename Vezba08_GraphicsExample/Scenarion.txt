@@ -1,0 +1,14 @@
+1 View 
+    1.1 Objasniti cemu sluzi ova klasa i sta dobijemo nasledjivanjem iste
+	1.2 Objasniti glavnu metodu onDraw(..)
+    1.3 Uputiti studente na Android Developers sajt
+2 Canvas
+    2.1 Objasniti cemu sluzi
+	2.2 Nabrojati nekoliko nacina crtanja po kanvasu 
+	    - crtanje oblika poput kruga ili pravougaonika, 
+		lepljenje bitmape, bojenje kanvasa
+3 Crtanje
+    3.1 Napisati sa studentima deo koji crta pozadinu
+	(nebo, travu, sunce i oblak)
+	3.2 Zadati studentima da uz nasu pomoc nacrtaju kucu
+		
