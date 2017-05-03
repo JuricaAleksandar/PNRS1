@@ -29,4 +29,5 @@
     <string name="taskCreated">New task added!</string>
     <string name="changesSaved">Changes saved!</string>taskDeleted
     <string name="taskDeleted">Task deleted!</string>
+    <string name="buttonBack">Back</string>
 </resources>

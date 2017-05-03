@@ -4,11 +4,83 @@
     android:id="@+id/activity_statistic"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/yellowBgd"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="horizontal"
-    android:background="@color/yellowBgd"
     tools:context="ra47_2014.pnrs1.rtrk.taskmanager.StatisticActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/activity_horizontal_margin"
+                android:paddingBottom="@dimen/activity_horizontal_margin">
+
+                <ra47_2014.pnrs1.rtrk.taskmanager.StatisticsView
+                    android:id="@+id/pieChart"
+                    android:layout_width="@dimen/pieChartSize"
+                    android:layout_height="@dimen/pieChartSize"
+                    android:layout_gravity="center"
+                    />
+            </LinearLayout>
+
+            <RadioGroup
+                android:paddingTop="@dimen/activity_horizontal_margin"
+                android:paddingBottom="@dimen/activity_horizontal_margin"
+                android:id="@+id/radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbLow"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/buttonGreenText"
+                    android:textSize="20sp" />
+
+                <RadioButton
+                    android:id="@+id/rbMedium"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/buttonYellowText"
+                    android:textSize="20sp" />
+
+                <RadioButton
+                    android:id="@+id/rbHigh"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/buttonRedText"
+                    android:textSize="20sp" />
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/buttonBack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity=""
+                android:text="@string/buttonBack"
+                android:textAllCaps="false"
+                android:textSize="25sp"
+                android:paddingTop="@dimen/activity_horizontal_margin" />
+
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>
