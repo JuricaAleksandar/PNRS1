@@ -64,12 +64,12 @@ public class AddActivity extends AppCompatActivity {
                     Task task = new Task(taskName.getText().toString(),timePick.getText().toString(),
                             datePick.getText().toString(),taskDesc.getText().toString(),
                             priority,reminder.isChecked());
-                    bundle.putSerializable("Task",task);
-                    toMain.putExtra("Task",bundle);
-                    toMain.putExtra(MainActivity.returnButtonCode, "Left");
+                    bundle.putSerializable(MainActivity.taskCode,task);
+                    toMain.putExtra(MainActivity.taskCode,bundle);
+                    toMain.putExtra(MainActivity.returnButtonCode, MainActivity.leftButtonCode);
                     int toastText;
-                    if (getIntent().getIntExtra("requestCode",0)== MainActivity.EDIT_TASK){
-                        toMain.putExtra("Position", getIntent().getIntExtra("Position", 0));
+                    if (getIntent().getIntExtra(MainActivity.reqCode,0)== MainActivity.EDIT_TASK){
+                        toMain.putExtra(MainActivity.positionCode, getIntent().getIntExtra(MainActivity.positionCode, 0));
                         toastText=R.string.changesSaved;
                     }else
                         toastText=R.string.taskCreated;
@@ -88,9 +88,9 @@ public class AddActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toMain.putExtra(MainActivity.returnButtonCode, "Right");
-                if (getIntent().getIntExtra("requestCode", 0) == MainActivity.EDIT_TASK){
-                    toMain.putExtra("Position", getIntent().getIntExtra("Position", 0));
+                toMain.putExtra(MainActivity.returnButtonCode,MainActivity.rightButtonCode);
+                if (getIntent().getIntExtra(MainActivity.reqCode, 0) == MainActivity.EDIT_TASK){
+                    toMain.putExtra(MainActivity.positionCode, getIntent().getIntExtra(MainActivity.positionCode, 0));
                     Toast toast = Toast.makeText(getApplicationContext(),R.string.taskDeleted, Toast.LENGTH_SHORT);
                     toast.show();
 
@@ -253,11 +253,11 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
-        addButton.setText(getIntent().getIntExtra("B1",0));
-        cancelButton.setText(getIntent().getIntExtra("B2",0));
-        if(getIntent().getIntExtra("requestCode",0) == MainActivity.EDIT_TASK){
-            Bundle bundle = getIntent().getBundleExtra("Task");
-            Task task = (Task)bundle.get("Task");
+        addButton.setText(getIntent().getIntExtra(MainActivity.sendButton1Code,0));
+        cancelButton.setText(getIntent().getIntExtra(MainActivity.sendButton2Code,0));
+        if(getIntent().getIntExtra(MainActivity.reqCode,0) == MainActivity.EDIT_TASK){
+            Bundle bundle = getIntent().getBundleExtra(MainActivity.taskCode);
+            Task task = (Task)bundle.get(MainActivity.taskCode);
             taskName.setText(task.mName);
             taskDesc.setText(task.mDescription);
             timePick.setText(task.mTime);

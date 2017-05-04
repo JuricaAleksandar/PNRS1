@@ -22,7 +22,7 @@ public class StatisticsView extends View{
     private Paint mBackgroundPaint;
     private Paint mTextPaint;
     private RectF mRect;
-    private float mPercentage;
+    private float mSetPercentage;
     private float mDrawnPercentage;
 
     public StatisticsView(Context context) {
@@ -41,7 +41,7 @@ public class StatisticsView extends View{
     }
 
     public void setPercentage(float percentage){
-        this.mPercentage = percentage;
+        this.mSetPercentage = percentage;
     }
 
     public void redrawPercentage(){
@@ -59,7 +59,7 @@ public class StatisticsView extends View{
 
     public void init(){
 
-        mPercentage = 0;
+        mSetPercentage = 0;
         mDrawnPercentage = 0;
 
         mPaint = new Paint();
@@ -94,9 +94,7 @@ public class StatisticsView extends View{
         canvas.drawArc(mRect, -90, 3.6f*mDrawnPercentage, true, mPaint);
         canvas.drawArc(mRect, -90, 3.6f*mDrawnPercentage, true, mBorderPaint);
         canvas.drawText(String.valueOf(mDrawnPercentage)+"%",getWidth()/2-45,getHeight()/2+20,mTextPaint);
-        if(mPercentage!=mDrawnPercentage)
-        {
+        if(mSetPercentage!=mDrawnPercentage)
             redrawPercentage();
-        }
     }
 }

@@ -9,7 +9,7 @@ import android.widget.RadioGroup;
 
 public class StatisticActivity extends AppCompatActivity {
 
-    Button mButton;
+    //Button mButton;
     RadioButton rbLow;
     RadioButton rbMed;
     RadioButton rbHigh;
@@ -22,7 +22,7 @@ public class StatisticActivity extends AppCompatActivity {
         setContentView(R.layout.activity_statistic);
         thisActivity = this;
 
-        mButton = (Button) findViewById(R.id.buttonBack);
+        //mButton = (Button) findViewById(R.id.buttonBack);
         pieChart = (StatisticsView) findViewById(R.id.pieChart);
         final RadioButton rbLow = (RadioButton) findViewById(R.id.rbLow);
         final RadioButton rbMed = (RadioButton) findViewById(R.id.rbMedium);
@@ -74,11 +74,11 @@ public class StatisticActivity extends AppCompatActivity {
         rbLow.setChecked(true);
         rbLow.callOnClick();
 
-        mButton.setOnClickListener(new View.OnClickListener() {
+        /*mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 thisActivity.finish();
             }
-        });
+        });*/
     }
 }

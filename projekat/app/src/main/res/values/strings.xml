@@ -16,7 +16,7 @@
     <string name="selectDateTitle">Select task date:</string>
     <string name="buttonSaveText">Save</string>
     <string name="buttonDeleteText">Delete</string>
-    <string name="timeDateError">Time travel not possible!</string>
+    <string name="timeDateError">Not possible!</string>
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="monday">Monday</string>
@@ -30,4 +30,5 @@
     <string name="changesSaved">Changes saved!</string>taskDeleted
     <string name="taskDeleted">Task deleted!</string>
     <string name="buttonBack">Back</string>
+    <string name="priority">Priority:</string>
 </resources>
