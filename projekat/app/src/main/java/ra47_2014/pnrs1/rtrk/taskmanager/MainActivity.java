@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
             } else if (data.getStringExtra(returnButtonCode).equals(rightButtonCode))
                 adapter.removeTask(data.getIntExtra(positionCode, 0));
         }
-        tasks = adapter.getTaskList();
     }
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
@@ -56,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         adapter = new ListAdapter(MainActivity.this);
+        tasks = adapter.getTaskList();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final ListView listView = (ListView) findViewById(R.id.lv);
@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
         final Intent statisticsIntent = new Intent(this,StatisticActivity.class);
         final Button addB = (Button) findViewById(R.id.buttonAddTask);
         final Button statB = (Button) findViewById(R.id.buttonStatistics);
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        startService(serviceIntent);
+
         listView.setAdapter(adapter);
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
