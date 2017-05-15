@@ -16,8 +16,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".StatisticActivity" />
-        <activity android:name=".AddActivity" android:windowSoftInputMode="adjustNothing">
-        </activity>
+        <activity
+            android:name=".AddActivity"
+            android:windowSoftInputMode="adjustNothing"></activity>
+
+        <service
+            android:name=".NotificationService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

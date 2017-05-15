@@ -8,6 +8,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     public static int EDIT_TASK = 0;
@@ -20,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
     public static String rightButtonCode = "Right";
     public static String taskCode = "Task";
     public static String reqCode = "requestCode";
-
-    private ListAdapter adapter = new ListAdapter(MainActivity.this);
+    public static ArrayList<Task> tasks;
+    private ListAdapter adapter;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -39,9 +41,11 @@ public class MainActivity extends AppCompatActivity {
                 Task task = (Task) bundle.get(taskCode);
                 adapter.editTask(data.getIntExtra(positionCode, 0), task);
 
+
             } else if (data.getStringExtra(returnButtonCode).equals(rightButtonCode))
                 adapter.removeTask(data.getIntExtra(positionCode, 0));
         }
+        tasks = adapter.getTaskList();
     }
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        adapter = new ListAdapter(MainActivity.this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final ListView listView = (ListView) findViewById(R.id.lv);

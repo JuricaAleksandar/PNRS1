@@ -44,6 +44,10 @@ public class ListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public ArrayList<Task> getTaskList(){
+        return mTaskList;
+    }
+
     @Override
     public int getCount() {
         return mTaskList.size();
