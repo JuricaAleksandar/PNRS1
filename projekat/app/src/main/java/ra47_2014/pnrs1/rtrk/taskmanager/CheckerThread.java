@@ -1,6 +1,7 @@
 package ra47_2014.pnrs1.rtrk.taskmanager;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 
 import java.text.ParseException;
@@ -17,11 +18,17 @@ public class CheckerThread extends Thread {
     private long PERIOD = 5000;
     private SimpleDateFormat format;
     private Context mContext;
+    private NotificationManager mNotificationManager;
+    private Notification.Builder mBuilder;
 
     CheckerThread(Context context){
         super();
         mContext=context;
         format = new SimpleDateFormat("hh:mm");
+        mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder = new Notification.Builder(mContext)
+                .setContentTitle("Task reminder")
+                .setSmallIcon(R.drawable.reminder);
     }
 
     @Override
@@ -37,28 +44,41 @@ public class CheckerThread extends Thread {
     @Override
     public void run() {
         while(mRun){
-            int i;
-            int len = MainActivity.tasks.size();
-            if (len!=0) {
-                Task[] mTasks = (Task[]) MainActivity.tasks.toArray();
-                for (i = 0; i < len; i++) {
-                    if (mTasks[i].mDate.equals("Today")) {
-                        Calendar current = Calendar.getInstance();
-                        Calendar taskTime = Calendar.getInstance();
-                        try {
-                            taskTime.setTime(format.parse(mTasks[i].mTime));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+            String msg = "Task to be finished in 15 minutes: ";
+            boolean notiHasItems=false;
+            for (Task t:MainActivity.tasks) {
+                if (t.mDate.equals("Today") && t.mReminder) {
+                    Calendar current = Calendar.getInstance();
+                    Calendar taskTime = Calendar.getInstance();
+                    try {
+                        taskTime.setTime(format.parse(t.mTime));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if ( taskTime.get(Calendar.HOUR_OF_DAY) == current.get(Calendar.HOUR_OF_DAY) ) {
+                        if(taskTime.get(Calendar.MINUTE)-current.get(Calendar.MINUTE)<=15 && taskTime.get(Calendar.MINUTE)-current.get(Calendar.MINUTE)>=0) {
+                            if (notiHasItems)
+                                msg += " , " + t.mName;
+                            else
+                                msg += t.mName;
+                            notiHasItems = true;
                         }
-                        if (taskTime.getTimeInMillis() - current.getTimeInMillis() < 900000) {
-                            Notification noti = new Notification.Builder(mContext)
-                                    .setContentTitle("Task reminder")
-                                    .setContentText(mTasks[i].mName + " should be finished in less then 15 minutes!")
-                                    .setSmallIcon(R.drawable.reminder)
-                                    .build();
+                    }else if (taskTime.get(Calendar.HOUR_OF_DAY) - current.get(Calendar.HOUR_OF_DAY) == 1) {
+                        if(taskTime.get(Calendar.MINUTE)+60-current.get(Calendar.MINUTE)<=15 && taskTime.get(Calendar.MINUTE)+60-current.get(Calendar.MINUTE)>=0){
+                            if (notiHasItems)
+                                msg += " , " + t.mName;
+                            else
+                                msg += t.mName;
+                            notiHasItems = true;
                         }
                     }
                 }
+            }
+            if(notiHasItems) {
+                mBuilder.setContentText(msg);
+                mNotificationManager.notify(0, mBuilder.build());
+            }else{
+                mNotificationManager.cancel(0);
             }
             try {
                 sleep(PERIOD);
