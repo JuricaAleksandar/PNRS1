@@ -47,28 +47,28 @@ public class CheckerThread extends Thread {
             String msg = "Task to be finished in 15 minutes: ";
             boolean notiHasItems=false;
             for (Task t:MainActivity.tasks) {
-                if (t.mDate.equals("Today") && t.mReminder) {
+                if (t.getDate().equals(R.string.today) && t.isReminder()/* && !t.isDone()*/) {
                     Calendar current = Calendar.getInstance();
                     Calendar taskTime = Calendar.getInstance();
                     try {
-                        taskTime.setTime(format.parse(t.mTime));
+                        taskTime.setTime(format.parse(t.getTime()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                     if ( taskTime.get(Calendar.HOUR_OF_DAY) == current.get(Calendar.HOUR_OF_DAY) ) {
                         if(taskTime.get(Calendar.MINUTE)-current.get(Calendar.MINUTE)<=15 && taskTime.get(Calendar.MINUTE)-current.get(Calendar.MINUTE)>=0) {
                             if (notiHasItems)
-                                msg += " , " + t.mName;
+                                msg += " , " + t.getName();
                             else
-                                msg += t.mName;
+                                msg += t.getName();
                             notiHasItems = true;
                         }
                     }else if (taskTime.get(Calendar.HOUR_OF_DAY) - current.get(Calendar.HOUR_OF_DAY) == 1) {
                         if(taskTime.get(Calendar.MINUTE)+60-current.get(Calendar.MINUTE)<=15 && taskTime.get(Calendar.MINUTE)+60-current.get(Calendar.MINUTE)>=0){
                             if (notiHasItems)
-                                msg += " , " + t.mName;
+                                msg += " , " + t.getName();
                             else
-                                msg += t.mName;
+                                msg += t.getName();
                             notiHasItems = true;
                         }
                     }

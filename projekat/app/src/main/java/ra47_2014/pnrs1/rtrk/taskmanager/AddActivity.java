@@ -258,13 +258,13 @@ public class AddActivity extends AppCompatActivity {
         if(getIntent().getIntExtra(MainActivity.reqCode,0) == MainActivity.EDIT_TASK){
             Bundle bundle = getIntent().getBundleExtra(MainActivity.taskCode);
             Task task = (Task)bundle.get(MainActivity.taskCode);
-            taskName.setText(task.mName);
-            taskDesc.setText(task.mDescription);
-            timePick.setText(task.mTime);
-            datePick.setText(task.mDate);
-            reminder.setChecked(task.mReminder);
+            taskName.setText(task.getName());
+            taskDesc.setText(task.getDescription());
+            timePick.setText(task.getTime());
+            datePick.setText(task.getDate());
+            reminder.setChecked(task.isReminder());
 
-            switch (task.mPriority){
+            switch (task.getPriority()){
                 case R.color.redButton:
                     redButton.callOnClick();
                     break;

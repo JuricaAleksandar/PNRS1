@@ -89,10 +89,10 @@ public class ListAdapter extends BaseAdapter {
 
         Task task = (Task) getItem(position);
         final ViewHolder holder = (ViewHolder) view.getTag();
-        holder.priority.setBackgroundResource(task.mPriority);
-        holder.name.setText(task.mName);
-        holder.date.setText(task.mDate);
-        holder.time.setText(task.mTime);
+        holder.priority.setBackgroundResource(task.getPriority());
+        holder.name.setText(task.getName());
+        holder.date.setText(task.getDate());
+        holder.time.setText(task.getTime());
         holder.done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -103,7 +103,7 @@ public class ListAdapter extends BaseAdapter {
             }
         });
         holder.reminder.setImageResource(R.drawable.reminder);
-        if(task.mReminder)
+        if(task.isReminder())
             holder.reminder.setVisibility(View.VISIBLE);
         else
             holder.reminder.setVisibility(View.INVISIBLE);

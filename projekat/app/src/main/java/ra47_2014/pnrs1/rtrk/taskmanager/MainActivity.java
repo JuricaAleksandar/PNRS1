@@ -1,18 +1,20 @@
 package ra47_2014.pnrs1.rtrk.taskmanager;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ServiceConnection{
 
     public static int EDIT_TASK = 0;
     public static int ADD_TASK = 1;
@@ -25,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     public static String taskCode = "Task";
     public static String reqCode = "requestCode";
     public static ArrayList<Task> tasks;
+
+    private ServiceConnection mServiceConnection;
+    private AidlInterface mBinderInterface;
     private ListAdapter adapter;
 
     @Override
@@ -34,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
                 Bundle bundle = data.getBundleExtra(taskCode);
                 Task task = (Task) bundle.get(taskCode);
                 adapter.addTask(task);
+                try {
+                    mBinderInterface.notifyAdd();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
         }
         else if(requestCode == EDIT_TASK && resultCode == RESULT_OK) {
@@ -42,10 +52,20 @@ public class MainActivity extends AppCompatActivity {
                 Bundle bundle = data.getBundleExtra(taskCode);
                 Task task = (Task) bundle.get(taskCode);
                 adapter.editTask(data.getIntExtra(positionCode, 0), task);
+                try {
+                    mBinderInterface.notifyEdit();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
 
-
-            } else if (data.getStringExtra(returnButtonCode).equals(rightButtonCode))
+            } else if (data.getStringExtra(returnButtonCode).equals(rightButtonCode)) {
                 adapter.removeTask(data.getIntExtra(positionCode, 0));
+                try {
+                    mBinderInterface.notifyDelete();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
     @Override
@@ -65,8 +85,10 @@ public class MainActivity extends AppCompatActivity {
         final Intent statisticsIntent = new Intent(this,StatisticActivity.class);
         final Button addB = (Button) findViewById(R.id.buttonAddTask);
         final Button statB = (Button) findViewById(R.id.buttonStatistics);
+
+        mServiceConnection = this;
         Intent serviceIntent = new Intent(this, NotificationService.class);
-        startService(serviceIntent);
+        bindService(serviceIntent, mServiceConnection, BIND_AUTO_CREATE);
 
         listView.setAdapter(adapter);
 
@@ -98,5 +120,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(statisticsIntent);
             }
         });
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        mBinderInterface = AidlInterface.Stub.asInterface(service);
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+
     }
 }
