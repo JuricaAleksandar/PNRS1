@@ -28,7 +28,7 @@ public class CheckerThread extends Thread {
         format = new SimpleDateFormat("hh:mm");
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = new Notification.Builder(mContext)
-                .setContentTitle("Task reminder")
+                .setContentTitle(mContext.getString(R.string.notificationTitle))
                 .setSmallIcon(R.drawable.reminder)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(),R.mipmap.ic_launcher ));
     }

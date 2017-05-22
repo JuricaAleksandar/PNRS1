@@ -20,7 +20,7 @@ public class ServiceNotifier extends AidlInterface.Stub{
         mContext = context;
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = new Notification.Builder(mContext)
-                .setContentTitle("Task alert")
+                .setContentTitle(mContext.getString(R.string.notificationTitle2))
                 .setSmallIcon(R.drawable.reminder)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(),R.mipmap.ic_launcher ));
 
@@ -28,21 +28,21 @@ public class ServiceNotifier extends AidlInterface.Stub{
 
     @Override
     public void notifyEdit() throws RemoteException {
-       mBuilder.setContentText("Task edited!");
+       mBuilder.setContentText(mContext.getString(R.string.editNotify));
         mNotificationManager.notify(1, mBuilder.build());
     }
 
     @Override
     public void notifyAdd() throws RemoteException {
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        mBuilder.setContentText("Task added!");
+        mBuilder.setContentText(mContext.getString(R.string.addNotify));
         mNotificationManager.notify(1, mBuilder.build());
     }
 
     @Override
     public void notifyDelete() throws RemoteException {
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        mBuilder.setContentText("Task deleted!");
+        mBuilder.setContentText(mContext.getString(R.string.deleteNotify));
         mNotificationManager.notify(1, mBuilder.build());
     }
 }

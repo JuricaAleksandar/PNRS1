@@ -31,4 +31,9 @@
     <string name="taskDeleted">Task deleted!</string>
     <string name="buttonBack">Back</string>
     <string name="priority">Priority:</string>
+    <string name="deleteNotify">Task deleted!</string>
+    <string name="addNotify">Task added!</string>
+    <string name="editNotify">Task edited!</string>
+    <string name="notificationTitle">Task reminder</string>
+    <string name="notificationTitle2">Task alert</string>
 </resources>
