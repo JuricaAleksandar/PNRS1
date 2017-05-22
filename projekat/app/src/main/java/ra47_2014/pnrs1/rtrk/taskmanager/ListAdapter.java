@@ -96,10 +96,19 @@ public class ListAdapter extends BaseAdapter {
         holder.done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(holder.done.isChecked())
+                if(holder.done.isChecked()) {
                     holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                else
+                    for(Task t:mTaskList){
+                        if (t.getName().equals(holder.name.getText()))
+                            t.setDone(true);
+                    }
+                } else{
                     holder.name.setPaintFlags(holder.name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                    for(Task t:mTaskList){
+                        if (t.getName().equals(holder.name.getText()))
+                            t.setDone(false);
+                    }
+                }
             }
         });
         holder.reminder.setImageResource(R.drawable.reminder);

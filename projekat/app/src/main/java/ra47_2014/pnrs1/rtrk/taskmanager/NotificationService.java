@@ -11,9 +11,9 @@ public class NotificationService extends Service {
 
     @Override
     public void onCreate() {
+        mServiceNotifier = new ServiceNotifier(this);
         mCheckerThread = new CheckerThread(this);
         mCheckerThread.start();
-        mServiceNotifier = new ServiceNotifier(this);
         super.onCreate();
     }
 

@@ -3,6 +3,7 @@ package ra47_2014.pnrs1.rtrk.taskmanager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,7 +29,8 @@ public class CheckerThread extends Thread {
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = new Notification.Builder(mContext)
                 .setContentTitle("Task reminder")
-                .setSmallIcon(R.drawable.reminder);
+                .setSmallIcon(R.drawable.reminder)
+                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(),R.mipmap.ic_launcher ));
     }
 
     @Override
@@ -47,7 +49,7 @@ public class CheckerThread extends Thread {
             String msg = "Task to be finished in 15 minutes: ";
             boolean notiHasItems=false;
             for (Task t:MainActivity.tasks) {
-                if (t.getDate().equals(R.string.today) && t.isReminder()/* && !t.isDone()*/) {
+                if (t.getDate().equals(mContext.getResources().getString(R.string.today)) && t.isReminder() && !t.isDone()) {
                     Calendar current = Calendar.getInstance();
                     Calendar taskTime = Calendar.getInstance();
                     try {
