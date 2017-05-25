@@ -25,7 +25,7 @@ public class CheckerThread extends Thread {
     CheckerThread(Context context){
         super();
         mContext=context;
-        format = new SimpleDateFormat("hh:mm");
+        format = new SimpleDateFormat("HH:mm");
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = new Notification.Builder(mContext)
                 .setContentTitle(mContext.getString(R.string.notificationTitle))
