@@ -100,19 +100,19 @@ public class ListAdapter extends BaseAdapter {
                     holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                     for(Task t:mTaskList){
                         if (t.getName().equals(holder.name.getText()))
-                            t.setDone(true);
+                            t.setDone(1);
                     }
                 } else{
                     holder.name.setPaintFlags(holder.name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                     for(Task t:mTaskList){
                         if (t.getName().equals(holder.name.getText()))
-                            t.setDone(false);
+                            t.setDone(0);
                     }
                 }
             }
         });
         holder.reminder.setImageResource(R.drawable.reminder);
-        if(task.isReminder())
+        if(task.isReminder()==1)
             holder.reminder.setVisibility(View.VISIBLE);
         else
             holder.reminder.setVisibility(View.INVISIBLE);

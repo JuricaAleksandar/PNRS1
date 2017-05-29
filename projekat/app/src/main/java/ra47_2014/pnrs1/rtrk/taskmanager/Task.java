@@ -13,18 +13,18 @@ public class Task implements Serializable{
     private String mDate;
     private String mDescription;
     private int mPriority;
-    private boolean mReminder;
-    private boolean mDone;
+    private int mReminder;
+    private int mDone;
 
 
-    public Task(String name,String time, String date,String description,int priority,boolean reminder) {
+    public Task(String name,String time, String date,String description,int priority,int reminder) {
         mName = name;
         mTime = time;
         mPriority = priority;
         mDate = date;
         mReminder = reminder;
         mDescription = description;
-        mDone = false;
+        mDone = 0;
     }
 
     public String getName() {
@@ -59,19 +59,19 @@ public class Task implements Serializable{
         this.mDescription = mDescription;
     }
 
-    public boolean isDone() {
+    public int isDone() {
         return mDone;
     }
 
-    public void setDone(boolean mDone) {
+    public void setDone(int mDone) {
         this.mDone = mDone;
     }
 
-    public boolean isReminder() {
+    public int isReminder() {
         return mReminder;
     }
 
-    public void setReminder(boolean mReminder) {
+    public void setReminder(int mReminder) {
         this.mReminder = mReminder;
     }
 

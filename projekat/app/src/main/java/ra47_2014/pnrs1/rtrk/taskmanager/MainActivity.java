@@ -3,6 +3,8 @@ package ra47_2014.pnrs1.rtrk.taskmanager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
@@ -27,10 +29,21 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     public static String taskCode = "Task";
     public static String reqCode = "requestCode";
     public static ArrayList<Task> tasks;
+    public static String tableName = "Tasks";
+    public static String databaseName = "TaskDatabase.db";
+    public static int dbVersion = 1;
+    public static String COLUMN1 = "Name";
+    public static String COLUMN2 = "Description";
+    public static String COLUMN3 = "Time";
+    public static String COLUMN4 = "Date";
+    public static String COLUMN5 = "Priority";
+    public static String COLUMN6 = "Done";
+    public static String COLUMN7 = "Reminder";
 
     private ServiceConnection mServiceConnection;
     private AidlInterface mBinderInterface;
     private ListAdapter adapter;
+    private SQLiteDatabase DB;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -85,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         final Intent statisticsIntent = new Intent(this,StatisticActivity.class);
         final Button addB = (Button) findViewById(R.id.buttonAddTask);
         final Button statB = (Button) findViewById(R.id.buttonStatistics);
+
+        DBHelper dbHelper = new DBHelper(this);
 
         mServiceConnection = this;
         Intent serviceIntent = new Intent(this, NotificationService.class);

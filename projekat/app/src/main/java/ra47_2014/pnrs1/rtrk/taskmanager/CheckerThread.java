@@ -49,7 +49,7 @@ public class CheckerThread extends Thread {
             String msg = "Task to be finished in 15 minutes: ";
             boolean notiHasItems=false;
             for (Task t:MainActivity.tasks) {
-                if (t.getDate().equals(mContext.getResources().getString(R.string.today)) && t.isReminder() && !t.isDone()) {
+                if (t.getDate().equals(mContext.getResources().getString(R.string.today)) && t.isReminder()==1 && t.isDone()==0) {
                     Calendar current = Calendar.getInstance();
                     Calendar taskTime = Calendar.getInstance();
                     try {

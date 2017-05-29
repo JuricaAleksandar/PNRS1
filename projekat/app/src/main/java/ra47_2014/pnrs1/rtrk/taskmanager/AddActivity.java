@@ -63,7 +63,7 @@ public class AddActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     Task task = new Task(taskName.getText().toString(),timePick.getText().toString(),
                             datePick.getText().toString(),taskDesc.getText().toString(),
-                            priority,reminder.isChecked());
+                            priority,reminder.isChecked()?1:0);
                     bundle.putSerializable(MainActivity.taskCode,task);
                     toMain.putExtra(MainActivity.taskCode,bundle);
                     toMain.putExtra(MainActivity.returnButtonCode, MainActivity.leftButtonCode);
@@ -262,7 +262,7 @@ public class AddActivity extends AppCompatActivity {
             taskDesc.setText(task.getDescription());
             timePick.setText(task.getTime());
             datePick.setText(task.getDate());
-            reminder.setChecked(task.isReminder());
+            reminder.setChecked(task.isReminder()==1);
 
             switch (task.getPriority()){
                 case R.color.redButton:
