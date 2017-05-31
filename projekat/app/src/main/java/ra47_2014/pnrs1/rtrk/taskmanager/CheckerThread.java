@@ -46,8 +46,10 @@ public class CheckerThread extends Thread {
     @Override
     public void run() {
         while(mRun){
-            String msg = "Task to be finished in 15 minutes: ";
+            String msg = "Tasks to be finished in 15 minutes: ";
             boolean notiHasItems=false;
+            boolean notify = false;
+            mBuilder.setVibrate(new long[]{0, 0});
             for (Task t:MainActivity.tasks) {
                 if (t.getDate().equals(mContext.getResources().getString(R.string.today)) && t.isReminder()==1 && t.isDone()==0) {
                     Calendar current = Calendar.getInstance();
@@ -74,10 +76,15 @@ public class CheckerThread extends Thread {
                             notiHasItems = true;
                         }
                     }
+                    if(t.ismReminded() == 0) {
+                        notify = true;
+                        t.setmReminded();
+                    }
                 }
             }
-            if(notiHasItems) {
-                mBuilder.setContentText(msg);
+            if(notiHasItems && notify) {
+                mBuilder.setContentText(msg)
+                        .setVibrate(new long[]{500, 500});
                 mNotificationManager.notify(0, mBuilder.build());
             }else{
                 mNotificationManager.cancel(0);

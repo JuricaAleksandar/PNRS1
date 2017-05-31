@@ -32,13 +32,14 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     public static String tableName = "Tasks";
     public static String databaseName = "TaskDatabase.db";
     public static int dbVersion = 1;
-    public static String COLUMN1 = "Name";
-    public static String COLUMN2 = "Description";
-    public static String COLUMN3 = "Time";
-    public static String COLUMN4 = "Date";
-    public static String COLUMN5 = "Priority";
-    public static String COLUMN6 = "Done";
-    public static String COLUMN7 = "Reminder";
+    public static String COLUMN_NAME = "Name";
+    public static String COLUMN_DESC = "Description";
+    public static String COLUMN_TIME = "Time";
+    public static String COLUMN_DATE = "Date";
+    public static String COLUMN_PR = "Priority";
+    public static String COLUMN_DONE = "Done";
+    public static String COLUMN_REMINDER = "Reminder";
+    public static String COLUMN_REMINDED = "Reminded";
 
     private ServiceConnection mServiceConnection;
     private AidlInterface mBinderInterface;

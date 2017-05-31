@@ -15,9 +15,18 @@ public class Task implements Serializable{
     private int mPriority;
     private int mReminder;
     private int mDone;
+    private int mReminded;
 
 
-    public Task(String name,String time, String date,String description,int priority,int reminder) {
+    public int ismReminded() {
+        return mReminded;
+    }
+
+    public void setmReminded() {
+        this.mReminded = 1;
+    }
+
+    public Task(String name, String time, String date, String description, int priority, int reminder) {
         mName = name;
         mTime = time;
         mPriority = priority;
@@ -25,6 +34,8 @@ public class Task implements Serializable{
         mReminder = reminder;
         mDescription = description;
         mDone = 0;
+        mReminded = 0;
+
     }
 
     public String getName() {
@@ -71,8 +82,8 @@ public class Task implements Serializable{
         return mReminder;
     }
 
-    public void setReminder(int mReminder) {
-        this.mReminder = mReminder;
+    public void setReminder() {
+        this.mReminder = 1;
     }
 
     public int getPriority() {

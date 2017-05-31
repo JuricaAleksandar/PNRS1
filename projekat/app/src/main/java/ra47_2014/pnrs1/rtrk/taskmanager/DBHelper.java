@@ -22,13 +22,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db = mContext.openOrCreateDatabase(MainActivity.databaseName, Context.MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS "
                 + MainActivity.tableName
-                + " (" + MainActivity.COLUMN1 + "text,"
-                + " (" + MainActivity.COLUMN2 + "text,"
-                + " (" + MainActivity.COLUMN3 + "text,"
-                + " (" + MainActivity.COLUMN4 + "text,"
-                + " (" + MainActivity.COLUMN5 + "int,"
-                + " (" + MainActivity.COLUMN6 + "int,"
-                + " (" + MainActivity.COLUMN7 + "int);");
+                + " (" + MainActivity.COLUMN_NAME + "TEXT,"
+                + " (" + MainActivity.COLUMN_DESC + "TEXT,"
+                + " (" + MainActivity.COLUMN_TIME + "TEXT,"
+                + " (" + MainActivity.COLUMN_DATE + "TEXT,"
+                + " (" + MainActivity.COLUMN_PR + "INTEGER,"
+                + " (" + MainActivity.COLUMN_DONE + "INTEGER,"
+                + " (" + MainActivity.COLUMN_REMINDER + "INTEGER,"
+                + " (" + MainActivity.COLUMN_REMINDED + "INTEGER);");
     }
 
     @Override
