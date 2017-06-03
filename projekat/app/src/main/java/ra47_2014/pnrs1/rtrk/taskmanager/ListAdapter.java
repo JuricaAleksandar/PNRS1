@@ -21,26 +21,18 @@ import java.util.ArrayList;
 
 public class ListAdapter extends BaseAdapter {
 
+    private DBHelper mDBHelper;
     private Context mContext;
     private ArrayList<Task> mTaskList;
 
-    public ListAdapter(Context context){
+    public ListAdapter(Context context,DBHelper dbh){
+        mDBHelper = dbh;
         mContext=context;
         mTaskList=new ArrayList<>();
     }
 
-    public void addTask(Task task){
-        mTaskList.add(task);
-        notifyDataSetChanged();
-    }
-    public void removeTask(int position){
-        mTaskList.remove(position);
-        notifyDataSetChanged();
-    }
-
-    public void editTask(int position,Task task){
-        mTaskList.remove(position);
-        mTaskList.add(position,task);
+    public void updateList(ArrayList<Task> tasks){
+        mTaskList = new ArrayList<>(tasks);
         notifyDataSetChanged();
     }
 
@@ -87,27 +79,29 @@ public class ListAdapter extends BaseAdapter {
             view.setTag(holder);
         }
 
-        Task task = (Task) getItem(position);
+        final Task task = (Task) getItem(position);
         final ViewHolder holder = (ViewHolder) view.getTag();
         holder.priority.setBackgroundResource(task.getPriority());
         holder.name.setText(task.getName());
         holder.date.setText(task.getDate());
         holder.time.setText(task.getTime());
-        holder.done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.done.setChecked(task.isDone()==1);
+        if(task.isDone()==1)
+            holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        else
+            holder.name.setPaintFlags(holder.name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+
+        holder.done.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
                 if(holder.done.isChecked()) {
-                    holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    for(Task t:mTaskList){
-                        if (t.getName().equals(holder.name.getText()))
-                            t.setDone(1);
-                    }
+                    task.setDone(1);
+                    mDBHelper.editTask(task);
+                    updateList(mDBHelper.readTasks());
                 } else{
-                    holder.name.setPaintFlags(holder.name.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-                    for(Task t:mTaskList){
-                        if (t.getName().equals(holder.name.getText()))
-                            t.setDone(0);
-                    }
+                    task.setDone(0);
+                    mDBHelper.editTask(task);
+                    updateList(mDBHelper.readTasks());
                 }
             }
         });

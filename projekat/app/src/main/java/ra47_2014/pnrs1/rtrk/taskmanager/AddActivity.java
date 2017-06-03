@@ -15,9 +15,11 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Random;
 
 public class AddActivity extends AppCompatActivity {
 
+    private long id;
     protected Calendar chosenDateAndTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +63,14 @@ public class AddActivity extends AppCompatActivity {
                         priority = R.color.redButton;
 
                     Bundle bundle = new Bundle();
-                    Task task = new Task(taskName.getText().toString(),timePick.getText().toString(),
+                    Task task = new Task(id,taskName.getText().toString(),timePick.getText().toString(),
                             datePick.getText().toString(),taskDesc.getText().toString(),
-                            priority,reminder.isChecked()?1:0);
+                            priority,0,reminder.isChecked()?1:0,0);
                     bundle.putSerializable(MainActivity.taskCode,task);
                     toMain.putExtra(MainActivity.taskCode,bundle);
                     toMain.putExtra(MainActivity.returnButtonCode, MainActivity.leftButtonCode);
                     int toastText;
                     if (getIntent().getIntExtra(MainActivity.reqCode,0)== MainActivity.EDIT_TASK){
-                        toMain.putExtra(MainActivity.positionCode, getIntent().getIntExtra(MainActivity.positionCode, 0));
                         toastText=R.string.changesSaved;
                     }else
                         toastText=R.string.taskCreated;
@@ -90,7 +91,7 @@ public class AddActivity extends AppCompatActivity {
             public void onClick(View v) {
                 toMain.putExtra(MainActivity.returnButtonCode,MainActivity.rightButtonCode);
                 if (getIntent().getIntExtra(MainActivity.reqCode, 0) == MainActivity.EDIT_TASK){
-                    toMain.putExtra(MainActivity.positionCode, getIntent().getIntExtra(MainActivity.positionCode, 0));
+                    toMain.putExtra(MainActivity.idCode, id);
                     Toast toast = Toast.makeText(getApplicationContext(),R.string.taskDeleted, Toast.LENGTH_SHORT);
                     toast.show();
 
@@ -252,7 +253,7 @@ public class AddActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
-
+        id = 0;
         addButton.setText(getIntent().getIntExtra(MainActivity.sendButton1Code,0));
         cancelButton.setText(getIntent().getIntExtra(MainActivity.sendButton2Code,0));
         if(getIntent().getIntExtra(MainActivity.reqCode,0) == MainActivity.EDIT_TASK){
@@ -263,6 +264,7 @@ public class AddActivity extends AppCompatActivity {
             timePick.setText(task.getTime());
             datePick.setText(task.getDate());
             reminder.setChecked(task.isReminder()==1);
+            id = task.getID();
 
             switch (task.getPriority()){
                 case R.color.redButton:

@@ -23,7 +23,6 @@ public class ServiceNotifier extends AidlInterface.Stub{
                 .setContentTitle(mContext.getString(R.string.notificationTitle2))
                 .setSmallIcon(R.drawable.reminder)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(),R.mipmap.ic_launcher ));
-
     }
 
     @Override

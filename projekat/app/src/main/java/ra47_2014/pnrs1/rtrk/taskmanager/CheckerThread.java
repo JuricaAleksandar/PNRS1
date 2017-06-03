@@ -21,16 +21,18 @@ public class CheckerThread extends Thread {
     private Context mContext;
     private NotificationManager mNotificationManager;
     private Notification.Builder mBuilder;
+    private DBHelper mDBHelper;
 
     CheckerThread(Context context){
         super();
-        mContext=context;
+        mContext = context;
         format = new SimpleDateFormat("HH:mm");
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = new Notification.Builder(mContext)
                 .setContentTitle(mContext.getString(R.string.notificationTitle))
                 .setSmallIcon(R.drawable.reminder)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(),R.mipmap.ic_launcher ));
+        mDBHelper = new DBHelper(mContext);
     }
 
     @Override
@@ -50,7 +52,8 @@ public class CheckerThread extends Thread {
             boolean notiHasItems=false;
             boolean notify = false;
             mBuilder.setVibrate(new long[]{0, 0});
-            for (Task t:MainActivity.tasks) {
+            //mBuilder.set
+            for (Task t:mDBHelper.readTasks()) {
                 if (t.getDate().equals(mContext.getResources().getString(R.string.today)) && t.isReminder()==1 && t.isDone()==0) {
                     Calendar current = Calendar.getInstance();
                     Calendar taskTime = Calendar.getInstance();
@@ -77,8 +80,9 @@ public class CheckerThread extends Thread {
                         }
                     }
                     if(t.ismReminded() == 0) {
-                        notify = true;
                         t.setmReminded();
+                        mDBHelper.editTask(t);
+                        notify = true;
                     }
                 }
             }
@@ -86,8 +90,6 @@ public class CheckerThread extends Thread {
                 mBuilder.setContentText(msg)
                         .setVibrate(new long[]{500, 500});
                 mNotificationManager.notify(0, mBuilder.build());
-            }else{
-                mNotificationManager.cancel(0);
             }
             try {
                 sleep(PERIOD);

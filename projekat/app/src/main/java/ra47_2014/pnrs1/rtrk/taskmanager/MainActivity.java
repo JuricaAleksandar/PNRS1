@@ -15,36 +15,32 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements ServiceConnection{
 
     public static int EDIT_TASK = 0;
     public static int ADD_TASK = 1;
+    public static String idCode = "Id";
     public static String sendButton1Code = "B1";
     public static String sendButton2Code = "B2";
-    public static String positionCode = "Position";
     public static String returnButtonCode = "Button";
     public static String leftButtonCode = "Left";
     public static String rightButtonCode = "Right";
     public static String taskCode = "Task";
     public static String reqCode = "requestCode";
     public static ArrayList<Task> tasks;
-    public static String tableName = "Tasks";
-    public static String databaseName = "TaskDatabase.db";
-    public static int dbVersion = 1;
-    public static String COLUMN_NAME = "Name";
-    public static String COLUMN_DESC = "Description";
-    public static String COLUMN_TIME = "Time";
-    public static String COLUMN_DATE = "Date";
-    public static String COLUMN_PR = "Priority";
-    public static String COLUMN_DONE = "Done";
-    public static String COLUMN_REMINDER = "Reminder";
-    public static String COLUMN_REMINDED = "Reminded";
 
+    private DBHelper dbHelper;
     private ServiceConnection mServiceConnection;
     private AidlInterface mBinderInterface;
     private ListAdapter adapter;
-    private SQLiteDatabase DB;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.updateList(dbHelper.readTasks());
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -52,7 +48,14 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             if (data.getStringExtra(returnButtonCode).equals(leftButtonCode)){
                 Bundle bundle = data.getBundleExtra(taskCode);
                 Task task = (Task) bundle.get(taskCode);
-                adapter.addTask(task);
+                long RANGE = 10000000;
+                Random random = new Random();
+                do {
+                    long randomValue = (long)(random.nextDouble()*RANGE);
+                    task.setID(randomValue);
+                }while(dbHelper.idExists(task));
+                dbHelper.insert(task);
+                adapter.updateList(dbHelper.readTasks());
                 try {
                     mBinderInterface.notifyAdd();
                 } catch (RemoteException e) {
@@ -65,7 +68,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
                 Bundle bundle = data.getBundleExtra(taskCode);
                 Task task = (Task) bundle.get(taskCode);
-                adapter.editTask(data.getIntExtra(positionCode, 0), task);
+                dbHelper.editTask(task);
+                adapter.updateList(dbHelper.readTasks());
                 try {
                     mBinderInterface.notifyEdit();
                 } catch (RemoteException e) {
@@ -73,7 +77,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                 }
 
             } else if (data.getStringExtra(returnButtonCode).equals(rightButtonCode)) {
-                adapter.removeTask(data.getIntExtra(positionCode, 0));
+                dbHelper.deleteTask(data.getLongExtra(idCode,0));
+                adapter.updateList(dbHelper.readTasks());
                 try {
                     mBinderInterface.notifyDelete();
                 } catch (RemoteException e) {
@@ -90,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        adapter = new ListAdapter(MainActivity.this);
-        tasks = adapter.getTaskList();
+        dbHelper = new DBHelper(this);
+        adapter = new ListAdapter(MainActivity.this,dbHelper);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final ListView listView = (ListView) findViewById(R.id.lv);
@@ -99,8 +104,6 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         final Intent statisticsIntent = new Intent(this,StatisticActivity.class);
         final Button addB = (Button) findViewById(R.id.buttonAddTask);
         final Button statB = (Button) findViewById(R.id.buttonStatistics);
-
-        DBHelper dbHelper = new DBHelper(this);
 
         mServiceConnection = this;
         Intent serviceIntent = new Intent(this, NotificationService.class);
@@ -117,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                 addIntent.putExtra(taskCode,bundle);
                 addIntent.putExtra(sendButton1Code,R.string.buttonSaveText);
                 addIntent.putExtra(sendButton2Code,R.string.buttonDeleteText);
-                addIntent.putExtra(positionCode,position);
                 startActivityForResult(addIntent,EDIT_TASK);
                 return true;
             }

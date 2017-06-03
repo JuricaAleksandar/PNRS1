@@ -8,6 +8,8 @@ import java.util.Calendar;
  */
 
 public class Task implements Serializable{
+
+    private long mID;
     private String mName;
     private String mTime;
     private String mDate;
@@ -17,25 +19,24 @@ public class Task implements Serializable{
     private int mDone;
     private int mReminded;
 
-
-    public int ismReminded() {
-        return mReminded;
-    }
-
-    public void setmReminded() {
-        this.mReminded = 1;
-    }
-
-    public Task(String name, String time, String date, String description, int priority, int reminder) {
+    public Task(long id,String name, String time, String date, String description, int priority, int done, int reminder, int reminded) {
+        mID = id;
         mName = name;
         mTime = time;
         mPriority = priority;
         mDate = date;
         mReminder = reminder;
         mDescription = description;
-        mDone = 0;
-        mReminded = 0;
+        mDone = done;
+        mReminded = reminded;
 
+    }
+    public long getID() {
+        return mID;
+    }
+
+    public void setID(long mID) {
+        this.mID = mID;
     }
 
     public String getName() {
@@ -92,5 +93,13 @@ public class Task implements Serializable{
 
     public void setPriority(int mPriority) {
         this.mPriority = mPriority;
+    }
+
+    public int ismReminded() {
+        return mReminded;
+    }
+
+    public void setmReminded() {
+        this.mReminded = 1;
     }
 }
