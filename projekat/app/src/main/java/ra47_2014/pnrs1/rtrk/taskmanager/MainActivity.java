@@ -3,8 +3,6 @@ package ra47_2014.pnrs1.rtrk.taskmanager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +12,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-public class MainActivity extends AppCompatActivity implements ServiceConnection,View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements ServiceConnection,
+        View.OnClickListener,ListView.OnItemLongClickListener{
 
     public static int EDIT_TASK = 0;
     public static int ADD_TASK = 1;
@@ -27,23 +23,21 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     public static String returnButtonCode = "Button";
     public static String leftButtonCode = "Left";
     public static String rightButtonCode = "Right";
-    public static String taskCode = "Task";
     public static String reqCode = "requestCode";
 
     private ListView listView;
-    private Intent addIntent;
+    private Intent addEditIntent;
     private Intent statisticsIntent;
     private Button addB;
     private Button statB;
     private DBHelper dbHelper;
-    private ServiceConnection mServiceConnection;
     private AidlInterface mBinderInterface;
     private ListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         dbHelper = new DBHelper(this);
-        adapter = new ListAdapter(MainActivity.this,dbHelper);
+        adapter = new ListAdapter(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -52,29 +46,15 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         statB = (Button) findViewById(R.id.buttonStatistics);
 
         listView.setAdapter(adapter);
+        listView.setOnItemLongClickListener(this);
         addB.setOnClickListener(this);
         statB.setOnClickListener(this);
 
-        addIntent = new Intent(this,AddActivity.class);
+        addEditIntent = new Intent(this,AddActivity.class);
         statisticsIntent = new Intent(this,StatisticActivity.class);
 
-        mServiceConnection = this;
         Intent serviceIntent = new Intent(this, NotificationService.class);
-        bindService(serviceIntent, mServiceConnection, BIND_AUTO_CREATE);
-
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Task item = (Task)adapter.getItem(position);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(taskCode,item);
-                addIntent.putExtra(taskCode,bundle);
-                addIntent.putExtra(sendButton1Code,R.string.buttonSaveText);
-                addIntent.putExtra(sendButton2Code,R.string.buttonDeleteText);
-                startActivityForResult(addIntent,EDIT_TASK);
-                return true;
-            }
-        });
+        bindService(serviceIntent, this , BIND_AUTO_CREATE);
     }
 
     @Override
@@ -87,14 +67,24 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.buttonAddTask:
-                addIntent.putExtra(sendButton1Code,R.string.buttonAddText);
-                addIntent.putExtra(sendButton2Code,R.string.buttonCancelText);
-                startActivityForResult(addIntent,ADD_TASK);
+                addEditIntent.putExtra(sendButton1Code,R.string.buttonAddText);
+                addEditIntent.putExtra(sendButton2Code,R.string.buttonCancelText);
+                startActivityForResult(addEditIntent,ADD_TASK);
                 break;
             case R.id.buttonStatistics:
                 startActivity(statisticsIntent);
                 break;
         }
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        long taskID = ((Task)adapter.getItem(position)).getID();
+        addEditIntent.putExtra(idCode,taskID);
+        addEditIntent.putExtra(sendButton1Code,R.string.buttonSaveText);
+        addEditIntent.putExtra(sendButton2Code,R.string.buttonDeleteText);
+        startActivityForResult(addEditIntent,EDIT_TASK);
+        return true;
     }
 
     @Override
@@ -107,16 +97,6 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ADD_TASK && resultCode == RESULT_OK) {
             if (data.getStringExtra(returnButtonCode).equals(leftButtonCode)){
-                Bundle bundle = data.getBundleExtra(taskCode);
-                Task task = (Task) bundle.get(taskCode);
-                long RANGE = 10000000;
-                Random random = new Random();
-                do {
-                    long randomValue = (long)(random.nextDouble()*RANGE);
-                    task.setID(randomValue);
-                }while(dbHelper.idExists(task));
-                dbHelper.insert(task);
-                adapter.updateList(dbHelper.readTasks());
                 try {
                     mBinderInterface.notifyAdd();
                 } catch (RemoteException e) {
@@ -126,11 +106,6 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         }
         else if(requestCode == EDIT_TASK && resultCode == RESULT_OK) {
             if (data.getStringExtra(returnButtonCode).equals(leftButtonCode)) {
-
-                Bundle bundle = data.getBundleExtra(taskCode);
-                Task task = (Task) bundle.get(taskCode);
-                dbHelper.editTask(task);
-                adapter.updateList(dbHelper.readTasks());
                 try {
                     mBinderInterface.notifyEdit();
                 } catch (RemoteException e) {
@@ -138,8 +113,6 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                 }
 
             } else if (data.getStringExtra(returnButtonCode).equals(rightButtonCode)) {
-                dbHelper.deleteTask(data.getLongExtra(idCode,0));
-                adapter.updateList(dbHelper.readTasks());
                 try {
                     mBinderInterface.notifyDelete();
                 } catch (RemoteException e) {

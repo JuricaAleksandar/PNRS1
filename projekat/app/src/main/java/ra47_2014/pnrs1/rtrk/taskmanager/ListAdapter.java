@@ -25,8 +25,8 @@ public class ListAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<Task> mTaskList;
 
-    public ListAdapter(Context context,DBHelper dbh){
-        mDBHelper = dbh;
+    public ListAdapter(Context context){
+        mDBHelper = new DBHelper(context);
         mContext=context;
         mTaskList=new ArrayList<>();
     }
@@ -77,11 +77,14 @@ public class ListAdapter extends BaseAdapter {
 
         final Task task = (Task) getItem(position);
         final ViewHolder holder = (ViewHolder) view.getTag();
+
         holder.priority.setBackgroundResource(task.getPriority());
         holder.name.setText(task.getName());
         holder.date.setText(task.getDate());
         holder.time.setText(task.getTime());
         holder.done.setChecked(task.isDone()==1);
+        holder.reminder.setImageResource(R.drawable.reminder);
+
         if(task.isDone()==1)
             holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         else
@@ -101,12 +104,11 @@ public class ListAdapter extends BaseAdapter {
                 }
             }
         });
-        holder.reminder.setImageResource(R.drawable.reminder);
+
         if(task.isReminder()==1)
             holder.reminder.setVisibility(View.VISIBLE);
         else
             holder.reminder.setVisibility(View.INVISIBLE);
-
 
         return view;
     }

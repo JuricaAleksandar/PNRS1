@@ -30,7 +30,7 @@ public class CheckerThread extends Thread {
         super();
         mContext = context;
         notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        format = new SimpleDateFormat("HH:mm");
+        format = new SimpleDateFormat("dd.MM.yyyy.HH:mm");
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mDBHelper = new DBHelper(mContext);
     }
@@ -52,14 +52,20 @@ public class CheckerThread extends Thread {
             boolean notiHasItems=false;
             boolean notify = false;
             for (Task t:mDBHelper.readTasks()) {
-                if (t.getDate().equals(mContext.getResources().getString(R.string.today)) && t.isReminder()==1 && t.isDone()==0) {
-                    Calendar current = Calendar.getInstance();
-                    Calendar taskTime = Calendar.getInstance();
-                    try {
-                        taskTime.setTime(format.parse(t.getTime()));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                Calendar current = Calendar.getInstance();
+                Calendar taskTime = Calendar.getInstance();
+                String date = t.getDate()+t.getTime();
+                try {
+                    taskTime.setTime(format.parse(date));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (current.get(Calendar.YEAR)==taskTime.get(Calendar.YEAR) &&
+                        current.get(Calendar.MONTH)==taskTime.get(Calendar.MONTH) &&
+                        current.get(Calendar.DAY_OF_MONTH)==taskTime.get(Calendar.DAY_OF_MONTH) &&
+                        t.isReminder()==1 &&
+                        t.isDone()==0
+                        ){
                     if ( taskTime.get(Calendar.HOUR_OF_DAY) == current.get(Calendar.HOUR_OF_DAY) ) {
                         if(taskTime.get(Calendar.MINUTE)-current.get(Calendar.MINUTE)<=15 && taskTime.get(Calendar.MINUTE)-current.get(Calendar.MINUTE)>=0) {
                             if (notiHasItems)

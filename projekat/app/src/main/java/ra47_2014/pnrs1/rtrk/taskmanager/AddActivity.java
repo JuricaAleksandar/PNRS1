@@ -19,7 +19,7 @@ import java.util.Random;
 
 public class AddActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private long id = 0;
+    private long id;
     private Intent toMain;
     private Button addButton;
     private Button cancelButton;
@@ -31,6 +31,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private TextView timePick;
     private TextView datePick;
     private CheckBox reminder;
+    private DBHelper mDBHelper;
 
     protected Calendar chosenDateAndTime;
 
@@ -41,6 +42,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         setContentView(R.layout.activity_add);
         toMain = new Intent(this,MainActivity.class);
+        mDBHelper = new DBHelper(this);
 
         addButton = (Button) findViewById(R.id.buttonAdd);
         cancelButton = (Button) findViewById(R.id.buttonCancel);
@@ -66,14 +68,13 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         cancelButton.setText(getIntent().getIntExtra(MainActivity.sendButton2Code,0));
 
         if(getIntent().getIntExtra(MainActivity.reqCode,0) == MainActivity.EDIT_TASK){
-            Bundle bundle = getIntent().getBundleExtra(MainActivity.taskCode);
-            Task task = (Task)bundle.get(MainActivity.taskCode);
+            id = getIntent().getLongExtra(MainActivity.idCode,0);
+            Task task = mDBHelper.readTask(id);
             taskName.setText(task.getName());
             taskDesc.setText(task.getDescription());
             timePick.setText(task.getTime());
             datePick.setText(task.getDate());
             reminder.setChecked(task.isReminder()==1);
-            id = task.getID();
 
             switch (task.getPriority()){
                 case R.color.redButton:
@@ -114,18 +115,26 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     else
                         priority = R.color.redButton;
 
-                    Bundle bundle = new Bundle();
                     Task task = new Task(id,taskName.getText().toString(),timePick.getText().toString(),
                             datePick.getText().toString(),taskDesc.getText().toString(),
                             priority,0,reminder.isChecked()?1:0,0);
-                    bundle.putSerializable(MainActivity.taskCode,task);
-                    toMain.putExtra(MainActivity.taskCode,bundle);
+
                     toMain.putExtra(MainActivity.returnButtonCode, MainActivity.leftButtonCode);
+
                     int toastText;
+
                     if (getIntent().getIntExtra(MainActivity.reqCode,0)== MainActivity.EDIT_TASK){
+                        mDBHelper.editTask(task);
                         toastText=R.string.changesSaved;
-                    }else
-                        toastText=R.string.taskCreated;
+                    }else {
+                        Random random = new Random();
+                        do {
+                            id = (long)(random.nextDouble()*10000000);
+                            task.setID(id);
+                        }while(mDBHelper.idExists(task));
+                        mDBHelper.insert(task);
+                        toastText = R.string.taskCreated;
+                    }
                     if (getParent() == null) {
                         setResult(RESULT_OK,toMain);
                     } else {
@@ -139,10 +148,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             case R.id.buttonCancel:
                 toMain.putExtra(MainActivity.returnButtonCode,MainActivity.rightButtonCode);
                 if (getIntent().getIntExtra(MainActivity.reqCode, 0) == MainActivity.EDIT_TASK){
-                    toMain.putExtra(MainActivity.idCode, id);
+                    mDBHelper.deleteTask(id);
                     Toast toast = Toast.makeText(getApplicationContext(),R.string.taskDeleted, Toast.LENGTH_SHORT);
                     toast.show();
-
                 }
                 if (getParent() == null) {
                     setResult(RESULT_OK,toMain);
@@ -230,52 +238,17 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         chosenDateAndTime.set(year,month,dayOfMonth,
                                 chosenDateAndTime.get(Calendar.HOUR_OF_DAY),chosenDateAndTime.get(Calendar.MINUTE));
-                        if (chosenDateAndTime.compareTo(currentDate)>=0) {
-                            if (chosenDateAndTime.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR)) {
-                                if (chosenDateAndTime.get(Calendar.DAY_OF_YEAR) == currentDate.get(Calendar.DAY_OF_YEAR))
-                                    datePick.setText(R.string.today);
-                                else if (chosenDateAndTime.get(Calendar.DAY_OF_YEAR) - currentDate.get(Calendar.DAY_OF_YEAR) == 1)
-                                    datePick.setText(R.string.tomorrow);
-                                else if (chosenDateAndTime.get(Calendar.DAY_OF_YEAR) - currentDate.get(Calendar.DAY_OF_YEAR) >= 2 &&
-                                        chosenDateAndTime.get(Calendar.DAY_OF_YEAR) - currentDate.get(Calendar.DAY_OF_YEAR) < 7) {
-                                    switch (chosenDateAndTime.get(Calendar.DAY_OF_WEEK)) {
-                                        case Calendar.MONDAY:
-                                            datePick.setText(R.string.monday);
-                                            break;
-                                        case Calendar.TUESDAY:
-                                            datePick.setText(R.string.tuesday);
-                                            break;
-                                        case Calendar.WEDNESDAY:
-                                            datePick.setText(R.string.wednesday);
-                                            break;
-                                        case Calendar.THURSDAY:
-                                            datePick.setText(R.string.thursday);
-                                            break;
-                                        case Calendar.FRIDAY:
-                                            datePick.setText(R.string.friday);
-                                            break;
-                                        case Calendar.SATURDAY:
-                                            datePick.setText(R.string.saturday);
-                                            break;
-                                        case Calendar.SUNDAY:
-                                            datePick.setText(R.string.sunday);
-                                            break;
-
-                                    }
-                                } else
-                                    datePick.setText(dayOfMonth + "." + (month + 1) + "." + year + ".");
-                            }
-                        }
+                        if (chosenDateAndTime.compareTo(currentDate)>=0)
+                            datePick.setText(dayOfMonth + "." + (month + 1) + "." + year + ".");
                         else {
-                            /*datePick.setText(currentDate.get(Calendar.DAY_OF_MONTH) + "."
-                                    + (currentDate.get(Calendar.MONTH) + 1)
-                                    + "." + currentDate.get(Calendar.YEAR) + ".");*/
-                            datePick.setText(R.string.today);
                             if(chosenDateAndTime.getTimeInMillis()-currentDate.getTimeInMillis()<-60000) {
                                 Toast toast = Toast.makeText(getApplicationContext(), R.string.timeDateError, Toast.LENGTH_SHORT);
                                 toast.show();
                             }
                             chosenDateAndTime=Calendar.getInstance();
+                            datePick.setText(chosenDateAndTime.get(Calendar.DAY_OF_MONTH) + "." +
+                                    (chosenDateAndTime.get(Calendar.MONTH)+1) + "." +
+                                    chosenDateAndTime.get(Calendar.YEAR) + ".");
                         }
                     }
                 },chosenDateAndTime.get(Calendar.YEAR),chosenDateAndTime.get(Calendar.MONTH),

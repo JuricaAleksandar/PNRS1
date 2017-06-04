@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by student on 29.5.2017.
  */
 
-public class DBHelper extends SQLiteOpenHelper implements Serializable {
+public class DBHelper extends SQLiteOpenHelper{
 
     public static String DATABASE_NAME = "OPABAZO.db";
     public static int DB_VERSION = 1;
@@ -111,21 +111,45 @@ public class DBHelper extends SQLiteOpenHelper implements Serializable {
         db.delete(TABLE_NAME, COLUMN_ID + "=?", new String[] {Long.toString(taskID)});
     }
 
-    public void editTask(Task task){
+    public void editTask(Task task) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_ID,task.getID());
-        values.put(COLUMN_NAME,task.getName());
-        values.put(COLUMN_DESC,task.getDescription());
-        values.put(COLUMN_TIME,task.getTime());
-        values.put(COLUMN_DATE,task.getDate());
-        values.put(COLUMN_PR,task.getPriority());
-        values.put(COLUMN_DONE,task.isDone());
-        values.put(COLUMN_REMINDER,task.isReminder());
-        values.put(COLUMN_REMINDED,task.ismReminded());
+        values.put(COLUMN_ID, task.getID());
+        values.put(COLUMN_NAME, task.getName());
+        values.put(COLUMN_DESC, task.getDescription());
+        values.put(COLUMN_TIME, task.getTime());
+        values.put(COLUMN_DATE, task.getDate());
+        values.put(COLUMN_PR, task.getPriority());
+        values.put(COLUMN_DONE, task.isDone());
+        values.put(COLUMN_REMINDER, task.isReminder());
+        values.put(COLUMN_REMINDED, task.ismReminded());
 
-        db.update(TABLE_NAME,values,"ID=?",new String[] {Long.toString(task.getID())});
+        db.update(TABLE_NAME, values, "ID=?", new String[]{Long.toString(task.getID())});
         close();
+    }
+
+    public Task readTask(long taskID){
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_NAME,null);
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()){
+            long id = cursor.getLong(cursor.getColumnIndex(COLUMN_ID));
+            if (id == taskID){
+                String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));
+                String desc = cursor.getString(cursor.getColumnIndex(COLUMN_DESC));
+                String time = cursor.getString(cursor.getColumnIndex(COLUMN_TIME));
+                String date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
+                int priority = cursor.getInt(cursor.getColumnIndex(COLUMN_PR));
+                int done = cursor.getInt(cursor.getColumnIndex(COLUMN_DONE));
+                int reminder = cursor.getInt(cursor.getColumnIndex(COLUMN_REMINDER));
+                int reminded = cursor.getInt(cursor.getColumnIndex(COLUMN_REMINDED));
+                Task task = new Task(id,name,time,date,desc,priority,done,reminder,reminded);
+                cursor.close();
+                return task;
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return null;
     }
 }
