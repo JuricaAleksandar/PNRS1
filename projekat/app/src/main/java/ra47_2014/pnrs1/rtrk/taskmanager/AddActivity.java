@@ -17,30 +17,82 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Random;
 
-public class AddActivity extends AppCompatActivity {
+public class AddActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private long id;
+    private long id = 0;
+    private Intent toMain;
+    private Button addButton;
+    private Button cancelButton;
+    private Button greenButton;
+    private Button yellowButton;
+    private Button redButton;
+    private EditText taskName;
+    private EditText taskDesc;
+    private TextView timePick;
+    private TextView datePick;
+    private CheckBox reminder;
+
     protected Calendar chosenDateAndTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add);
-        final Intent toMain = new Intent(this,MainActivity.class);
-        final Button addButton = (Button) findViewById(R.id.buttonAdd);
-        final Button cancelButton = (Button) findViewById(R.id.buttonCancel);
-        final Button greenButton = (Button) findViewById(R.id.buttonGreen);
-        final Button yellowButton = (Button) findViewById(R.id.buttonYellow);
-        final Button redButton = (Button) findViewById(R.id.buttonRed);
-        final EditText taskName = (EditText) findViewById(R.id.editTaskName);
-        final EditText taskDesc = (EditText) findViewById(R.id.editTaskDesc);
-        final TextView timePick = (TextView) findViewById(R.id.textViewTime);
-        final TextView datePick = (TextView) findViewById(R.id.textViewDate);
-        final CheckBox reminder = (CheckBox) findViewById(R.id.checkBoxRemind);
+        toMain = new Intent(this,MainActivity.class);
+
+        addButton = (Button) findViewById(R.id.buttonAdd);
+        cancelButton = (Button) findViewById(R.id.buttonCancel);
+        greenButton = (Button) findViewById(R.id.buttonGreen);
+        yellowButton = (Button) findViewById(R.id.buttonYellow);
+        redButton = (Button) findViewById(R.id.buttonRed);
+        taskName = (EditText) findViewById(R.id.editTaskName);
+        taskDesc = (EditText) findViewById(R.id.editTaskDesc);
+        timePick = (TextView) findViewById(R.id.textViewTime);
+        datePick = (TextView) findViewById(R.id.textViewDate);
+        reminder = (CheckBox) findViewById(R.id.checkBoxRemind);
         chosenDateAndTime=Calendar.getInstance();
 
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        addButton.setOnClickListener(this);
+        cancelButton.setOnClickListener(this);
+        greenButton.setOnClickListener(this);
+        yellowButton.setOnClickListener(this);
+        redButton.setOnClickListener(this);
+        timePick.setOnClickListener(this);
+        datePick.setOnClickListener(this);
+
+        addButton.setText(getIntent().getIntExtra(MainActivity.sendButton1Code,0));
+        cancelButton.setText(getIntent().getIntExtra(MainActivity.sendButton2Code,0));
+
+        if(getIntent().getIntExtra(MainActivity.reqCode,0) == MainActivity.EDIT_TASK){
+            Bundle bundle = getIntent().getBundleExtra(MainActivity.taskCode);
+            Task task = (Task)bundle.get(MainActivity.taskCode);
+            taskName.setText(task.getName());
+            taskDesc.setText(task.getDescription());
+            timePick.setText(task.getTime());
+            datePick.setText(task.getDate());
+            reminder.setChecked(task.isReminder()==1);
+            id = task.getID();
+
+            switch (task.getPriority()){
+                case R.color.redButton:
+                    redButton.callOnClick();
+                    break;
+                case R.color.yellowButton:
+                    yellowButton.callOnClick();
+                    break;
+                default:
+                    greenButton.callOnClick();
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.buttonAdd:
                 if(taskName.getText().toString().isEmpty())
                     taskName.requestFocus();
                 else if(taskDesc.getText().toString().isEmpty())
@@ -83,12 +135,8 @@ public class AddActivity extends AppCompatActivity {
                     toast.show();
                     finish();
                 }
-
-            }
-        });
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.buttonCancel:
                 toMain.putExtra(MainActivity.returnButtonCode,MainActivity.rightButtonCode);
                 if (getIntent().getIntExtra(MainActivity.reqCode, 0) == MainActivity.EDIT_TASK){
                     toMain.putExtra(MainActivity.idCode, id);
@@ -102,45 +150,32 @@ public class AddActivity extends AppCompatActivity {
                     getParent().setResult(RESULT_OK, toMain);
                 }
                 finish();
-            }
-        });
-        greenButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                greenButton.setBackgroundResource(R.color.greenButtonPressed);
-                redButton.setBackgroundResource(R.color.redButton);
-                yellowButton.setBackgroundResource(R.color.yellowButton);
-                greenButton.setEnabled(false);
-                redButton.setEnabled(true);
-                yellowButton.setEnabled(true);
-            }
-        });
-        yellowButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                greenButton.setBackgroundResource(R.color.greenButton);
-                redButton.setBackgroundResource(R.color.redButton);
-                yellowButton.setBackgroundResource(R.color.yellowButtonPressed);
-                greenButton.setEnabled(true);
-                redButton.setEnabled(true);
-                yellowButton.setEnabled(false);
-            }
-        });
-        redButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.buttonRed:
                 greenButton.setBackgroundResource(R.color.greenButton);
                 redButton.setBackgroundResource(R.color.redButtonPressed);
                 yellowButton.setBackgroundResource(R.color.yellowButton);
                 greenButton.setEnabled(true);
                 redButton.setEnabled(false);
                 yellowButton.setEnabled(true);
-            }
-        });
-
-        timePick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.buttonYellow:
+                greenButton.setBackgroundResource(R.color.greenButton);
+                redButton.setBackgroundResource(R.color.redButton);
+                yellowButton.setBackgroundResource(R.color.yellowButtonPressed);
+                greenButton.setEnabled(true);
+                redButton.setEnabled(true);
+                yellowButton.setEnabled(false);
+                break;
+            case R.id.buttonGreen:
+                greenButton.setBackgroundResource(R.color.greenButtonPressed);
+                redButton.setBackgroundResource(R.color.redButton);
+                yellowButton.setBackgroundResource(R.color.yellowButton);
+                greenButton.setEnabled(false);
+                redButton.setEnabled(true);
+                yellowButton.setEnabled(true);
+                break;
+            case R.id.textViewTime:
                 final Calendar currentTime = Calendar.getInstance();
                 final TimePickerDialog timePickerDialog;
                 timePickerDialog = new TimePickerDialog(AddActivity.this, new TimePickerDialog.OnTimeSetListener() {
@@ -186,12 +221,8 @@ public class AddActivity extends AppCompatActivity {
                 },chosenDateAndTime.get(Calendar.HOUR_OF_DAY),chosenDateAndTime.get(Calendar.MINUTE),true);
                 timePickerDialog.setTitle(R.string.selectTimeTitle);
                 timePickerDialog.show();
-            }
-        });
-
-        datePick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.textViewDate:
                 final Calendar currentDate = Calendar.getInstance();
                 final DatePickerDialog datePickerDialog;
                 datePickerDialog = new DatePickerDialog(AddActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -251,32 +282,7 @@ public class AddActivity extends AppCompatActivity {
                         chosenDateAndTime.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.setTitle(R.string.selectDateTitle);
                 datePickerDialog.show();
-            }
-        });
-        id = 0;
-        addButton.setText(getIntent().getIntExtra(MainActivity.sendButton1Code,0));
-        cancelButton.setText(getIntent().getIntExtra(MainActivity.sendButton2Code,0));
-        if(getIntent().getIntExtra(MainActivity.reqCode,0) == MainActivity.EDIT_TASK){
-            Bundle bundle = getIntent().getBundleExtra(MainActivity.taskCode);
-            Task task = (Task)bundle.get(MainActivity.taskCode);
-            taskName.setText(task.getName());
-            taskDesc.setText(task.getDescription());
-            timePick.setText(task.getTime());
-            datePick.setText(task.getDate());
-            reminder.setChecked(task.isReminder()==1);
-            id = task.getID();
-
-            switch (task.getPriority()){
-                case R.color.redButton:
-                    redButton.callOnClick();
-                    break;
-                case R.color.yellowButton:
-                    yellowButton.callOnClick();
-                    break;
-                default:
-                    greenButton.callOnClick();
-                    break;
-            }
+                break;
         }
     }
 }

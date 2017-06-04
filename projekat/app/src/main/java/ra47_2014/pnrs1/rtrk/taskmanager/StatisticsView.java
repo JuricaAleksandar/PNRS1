@@ -45,7 +45,10 @@ public class StatisticsView extends View{
     }
 
     public void redrawPercentage(){
-        mDrawnPercentage++;
+        if(mSetPercentage-mDrawnPercentage>1)
+            mDrawnPercentage+=1.13;
+        else
+            mDrawnPercentage=mSetPercentage;
         invalidate();
     }
 
@@ -93,7 +96,12 @@ public class StatisticsView extends View{
         canvas.drawArc(mRect, -90, 360, true, mBackgroundPaint);
         canvas.drawArc(mRect, -90, 3.6f*mDrawnPercentage, true, mPaint);
         canvas.drawArc(mRect, -90, 3.6f*mDrawnPercentage, true, mBorderPaint);
-        canvas.drawText(String.valueOf(mDrawnPercentage)+"%",getWidth()/2-45,getHeight()/2+20,mTextPaint);
+        if(mDrawnPercentage<10)
+            canvas.drawText(String.format("%.2f",mDrawnPercentage)+"%",getWidth()/2-55,getHeight()/2+20,mTextPaint);
+        else if(mDrawnPercentage>=10 && mDrawnPercentage<100)
+            canvas.drawText(String.format("%.2f",mDrawnPercentage)+"%",getWidth()/2-60,getHeight()/2+20,mTextPaint);
+        else
+            canvas.drawText(String.format("%.2f",mDrawnPercentage)+"%",getWidth()/2-75,getHeight()/2+20,mTextPaint);
         if(mSetPercentage!=mDrawnPercentage)
             redrawPercentage();
     }

@@ -4,6 +4,8 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
+import android.net.Uri;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,16 +24,14 @@ public class CheckerThread extends Thread {
     private NotificationManager mNotificationManager;
     private Notification.Builder mBuilder;
     private DBHelper mDBHelper;
+    private Uri notificationSound;
 
     CheckerThread(Context context){
         super();
         mContext = context;
+        notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         format = new SimpleDateFormat("HH:mm");
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        mBuilder = new Notification.Builder(mContext)
-                .setContentTitle(mContext.getString(R.string.notificationTitle))
-                .setSmallIcon(R.drawable.reminder)
-                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(),R.mipmap.ic_launcher ));
         mDBHelper = new DBHelper(mContext);
     }
 
@@ -51,8 +51,6 @@ public class CheckerThread extends Thread {
             String msg = "Tasks to be finished in 15 minutes: ";
             boolean notiHasItems=false;
             boolean notify = false;
-            mBuilder.setVibrate(new long[]{0, 0});
-            //mBuilder.set
             for (Task t:mDBHelper.readTasks()) {
                 if (t.getDate().equals(mContext.getResources().getString(R.string.today)) && t.isReminder()==1 && t.isDone()==0) {
                     Calendar current = Calendar.getInstance();
@@ -87,7 +85,12 @@ public class CheckerThread extends Thread {
                 }
             }
             if(notiHasItems && notify) {
-                mBuilder.setContentText(msg)
+                mBuilder = new Notification.Builder(mContext)
+                        .setContentTitle(mContext.getString(R.string.notificationTitle))
+                        .setSmallIcon(R.drawable.reminder)
+                        .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(),R.mipmap.ic_launcher ))
+                        .setSound(notificationSound)
+                        .setContentText(msg)
                         .setVibrate(new long[]{500, 500});
                 mNotificationManager.notify(0, mBuilder.build());
             }

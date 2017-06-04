@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper implements Serializable {
 
-    public static String DATABASE_NAME = "BZA.db";
+    public static String DATABASE_NAME = "OPABAZO.db";
     public static int DB_VERSION = 1;
     public static String TABLE_NAME = "Tasks";
     public static String COLUMN_ID = "ID";
@@ -29,16 +29,12 @@ public class DBHelper extends SQLiteOpenHelper implements Serializable {
     public static String COLUMN_REMINDER = "Reminder";
     public static String COLUMN_REMINDED = "Reminded";
 
-    private Context mContext;
-
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DB_VERSION);
-        mContext = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //db = mContext.openOrCreateDatabase(DATABASE_NAME, Context.MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + COLUMN_ID + " INTEGER, "
                 + COLUMN_NAME + " TEXT, "

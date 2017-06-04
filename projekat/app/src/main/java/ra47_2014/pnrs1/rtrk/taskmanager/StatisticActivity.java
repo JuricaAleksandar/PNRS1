@@ -7,78 +7,95 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-public class StatisticActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
-    //Button mButton;
-    RadioButton rbLow;
-    RadioButton rbMed;
-    RadioButton rbHigh;
-    StatisticsView pieChart;
-    StatisticActivity thisActivity;
+public class StatisticActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private RadioButton rbLow;
+    private RadioButton rbMed;
+    private RadioButton rbHigh;
+    private StatisticsView pieChart;
+    private DBHelper mDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
-        thisActivity = this;
-
-        //mButton = (Button) findViewById(R.id.buttonBack);
+        mDBHelper = new DBHelper(this);
         pieChart = (StatisticsView) findViewById(R.id.pieChart);
-        final RadioButton rbLow = (RadioButton) findViewById(R.id.rbLow);
-        final RadioButton rbMed = (RadioButton) findViewById(R.id.rbMedium);
-        final RadioButton rbHigh = (RadioButton) findViewById(R.id.rbHigh);
+        rbLow = (RadioButton) findViewById(R.id.rbLow);
+        rbMed = (RadioButton) findViewById(R.id.rbMedium);
+        rbHigh = (RadioButton) findViewById(R.id.rbHigh);
+        rbLow.setOnClickListener(this);
+        rbMed.setOnClickListener(this);
+        rbHigh.setOnClickListener(this);
+        rbLow.setChecked(true);
+        rbLow.callOnClick();
+    }
 
-        rbLow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rbLow.setClickable(false);
-                rbMed.setClickable(true);
-                rbHigh.setClickable(true);
-                pieChart.init();
-                pieChart.setPercentage(13.f);
-                pieChart.setColor(R.color.greenButton);
-                pieChart.setBgdColor(R.color.greenButtonPressed);
-                pieChart.invalidate();
-            }
-        });
-
-        rbMed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rbLow.setClickable(true);
-                rbMed.setClickable(false);
-                rbHigh.setClickable(true);
-                rbMed.toggle();
-                pieChart.init();
-                pieChart.setPercentage(73.f);
-                pieChart.invalidate();
-                pieChart.setColor(R.color.yellowButton);
-                pieChart.setBgdColor(R.color.yellowButtonPressed);
-                pieChart.invalidate();
-            }
-        });
-
-        rbHigh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
+        ArrayList<Task> tasks = mDBHelper.readTasks();
+        float done = 0;
+        float total = 0;
+        switch(v.getId()){
+            case R.id.rbHigh:
+                for(Task t:tasks)
+                    if(t.getPriority()==R.color.redButton){
+                        total++;
+                        if(t.isDone()==1)
+                            done++;
+                    }
                 rbLow.setClickable(true);
                 rbMed.setClickable(true);
                 rbHigh.setClickable(false);
                 pieChart.init();
-                pieChart.setPercentage(49.f);
+                if(total==0)
+                    pieChart.setPercentage(0.f);
+                else
+                    pieChart.setPercentage((done/total)*100);
                 pieChart.setColor(R.color.redButton);
                 pieChart.setBgdColor(R.color.redButtonPressed);
                 pieChart.invalidate();
-            }
-        });
-        rbLow.setChecked(true);
-        rbLow.callOnClick();
-
-        /*mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                thisActivity.finish();
-            }
-        });*/
+                break;
+            case R.id.rbMedium:
+                for(Task t:tasks)
+                    if(t.getPriority()==R.color.yellowButton){
+                        total++;
+                        if(t.isDone()==1)
+                            done++;
+                    }
+                rbLow.setClickable(true);
+                rbMed.setClickable(false);
+                rbHigh.setClickable(true);
+                pieChart.init();
+                if(total==0)
+                    pieChart.setPercentage(0.f);
+                else
+                    pieChart.setPercentage((done/total)*100);
+                pieChart.setColor(R.color.yellowButton);
+                pieChart.setBgdColor(R.color.yellowButtonPressed);
+                pieChart.invalidate();
+                break;
+            case R.id.rbLow:
+                for(Task t:tasks)
+                    if(t.getPriority()==R.color.greenButton){
+                        total++;
+                        if(t.isDone()==1)
+                            done++;
+                    }
+                rbLow.setClickable(false);
+                rbMed.setClickable(true);
+                rbHigh.setClickable(true);
+                pieChart.init();
+                if(total==0)
+                    pieChart.setPercentage(0.f);
+                else
+                    pieChart.setPercentage((done/total)*100);
+                pieChart.setColor(R.color.greenButton);
+                pieChart.setBgdColor(R.color.greenButtonPressed);
+                pieChart.invalidate();
+                break;
+        }
     }
 }

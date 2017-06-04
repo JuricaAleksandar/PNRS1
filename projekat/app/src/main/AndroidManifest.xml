@@ -18,7 +18,9 @@
         <activity android:name=".StatisticActivity" />
         <activity
             android:name=".AddActivity"
-            android:windowSoftInputMode="adjustNothing"></activity>
+            android:windowSoftInputMode="adjustNothing"
+            android:screenOrientation="portrait">
+        </activity>
 
         <service
             android:name=".NotificationService"

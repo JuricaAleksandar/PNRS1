@@ -17,7 +17,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity implements ServiceConnection{
+public class MainActivity extends AppCompatActivity implements ServiceConnection,View.OnClickListener{
 
     public static int EDIT_TASK = 0;
     public static int ADD_TASK = 1;
@@ -29,17 +29,78 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     public static String rightButtonCode = "Right";
     public static String taskCode = "Task";
     public static String reqCode = "requestCode";
-    public static ArrayList<Task> tasks;
 
+    private ListView listView;
+    private Intent addIntent;
+    private Intent statisticsIntent;
+    private Button addB;
+    private Button statB;
     private DBHelper dbHelper;
     private ServiceConnection mServiceConnection;
     private AidlInterface mBinderInterface;
     private ListAdapter adapter;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        dbHelper = new DBHelper(this);
+        adapter = new ListAdapter(MainActivity.this,dbHelper);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        listView = (ListView) findViewById(R.id.lv);
+        addB = (Button) findViewById(R.id.buttonAddTask);
+        statB = (Button) findViewById(R.id.buttonStatistics);
+
+        listView.setAdapter(adapter);
+        addB.setOnClickListener(this);
+        statB.setOnClickListener(this);
+
+        addIntent = new Intent(this,AddActivity.class);
+        statisticsIntent = new Intent(this,StatisticActivity.class);
+
+        mServiceConnection = this;
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        bindService(serviceIntent, mServiceConnection, BIND_AUTO_CREATE);
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Task item = (Task)adapter.getItem(position);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(taskCode,item);
+                addIntent.putExtra(taskCode,bundle);
+                addIntent.putExtra(sendButton1Code,R.string.buttonSaveText);
+                addIntent.putExtra(sendButton2Code,R.string.buttonDeleteText);
+                startActivityForResult(addIntent,EDIT_TASK);
+                return true;
+            }
+        });
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         adapter.updateList(dbHelper.readTasks());
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.buttonAddTask:
+                addIntent.putExtra(sendButton1Code,R.string.buttonAddText);
+                addIntent.putExtra(sendButton2Code,R.string.buttonCancelText);
+                startActivityForResult(addIntent,ADD_TASK);
+                break;
+            case R.id.buttonStatistics:
+                startActivity(statisticsIntent);
+                break;
+        }
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        intent.putExtra(reqCode, requestCode);
+        super.startActivityForResult(intent, requestCode);
     }
 
     @Override
@@ -86,58 +147,6 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                 }
             }
         }
-    }
-    @Override
-    public void startActivityForResult(Intent intent, int requestCode) {
-        intent.putExtra(reqCode, requestCode);
-        super.startActivityForResult(intent, requestCode);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        dbHelper = new DBHelper(this);
-        adapter = new ListAdapter(MainActivity.this,dbHelper);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        final ListView listView = (ListView) findViewById(R.id.lv);
-        final Intent addIntent = new Intent(this,AddActivity.class);
-        final Intent statisticsIntent = new Intent(this,StatisticActivity.class);
-        final Button addB = (Button) findViewById(R.id.buttonAddTask);
-        final Button statB = (Button) findViewById(R.id.buttonStatistics);
-
-        mServiceConnection = this;
-        Intent serviceIntent = new Intent(this, NotificationService.class);
-        bindService(serviceIntent, mServiceConnection, BIND_AUTO_CREATE);
-
-        listView.setAdapter(adapter);
-
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Task item = (Task)adapter.getItem(position);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(taskCode,item);
-                addIntent.putExtra(taskCode,bundle);
-                addIntent.putExtra(sendButton1Code,R.string.buttonSaveText);
-                addIntent.putExtra(sendButton2Code,R.string.buttonDeleteText);
-                startActivityForResult(addIntent,EDIT_TASK);
-                return true;
-            }
-        });
-        addB.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                addIntent.putExtra(sendButton1Code,R.string.buttonAddText);
-                addIntent.putExtra(sendButton2Code,R.string.buttonCancelText);
-                startActivityForResult(addIntent,ADD_TASK);
-            }
-        });
-        statB.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                startActivity(statisticsIntent);
-            }
-        });
     }
 
     @Override
