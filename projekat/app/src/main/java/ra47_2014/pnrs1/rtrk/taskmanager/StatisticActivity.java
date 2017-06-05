@@ -3,9 +3,7 @@ package ra47_2014.pnrs1.rtrk.taskmanager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import java.util.ArrayList;
 
@@ -16,12 +14,14 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
     private RadioButton rbHigh;
     private StatisticsView pieChart;
     private DBHelper mDBHelper;
+    private CalculateStatistics calculateStatistics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
         mDBHelper = new DBHelper(this);
+        calculateStatistics = new CalculateStatistics();
         pieChart = (StatisticsView) findViewById(R.id.pieChart);
         rbLow = (RadioButton) findViewById(R.id.rbLow);
         rbMed = (RadioButton) findViewById(R.id.rbMedium);
@@ -53,7 +53,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                 if(total==0)
                     pieChart.setPercentage(0.f);
                 else
-                    pieChart.setPercentage((done/total)*100);
+                    pieChart.setPercentage(calculateStatistics.calculate(done,total)*100);
                 pieChart.setColor(R.color.redButton);
                 pieChart.setBgdColor(R.color.redButtonPressed);
                 pieChart.invalidate();
@@ -72,7 +72,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                 if(total==0)
                     pieChart.setPercentage(0.f);
                 else
-                    pieChart.setPercentage((done/total)*100);
+                    pieChart.setPercentage(calculateStatistics.calculate(done,total)*100);
                 pieChart.setColor(R.color.yellowButton);
                 pieChart.setBgdColor(R.color.yellowButtonPressed);
                 pieChart.invalidate();
@@ -91,7 +91,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                 if(total==0)
                     pieChart.setPercentage(0.f);
                 else
-                    pieChart.setPercentage((done/total)*100);
+                    pieChart.setPercentage(calculateStatistics.calculate(done,total)*100);
                 pieChart.setColor(R.color.greenButton);
                 pieChart.setBgdColor(R.color.greenButtonPressed);
                 pieChart.invalidate();
