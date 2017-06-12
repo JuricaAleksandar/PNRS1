@@ -53,7 +53,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                 if(total==0)
                     pieChart.setPercentage(0.f);
                 else
-                    pieChart.setPercentage(calculateStatistics.calculate(done,total)*100);
+                    pieChart.setPercentage(calculateStatistics.calculate(done,total));
                 pieChart.setColor(R.color.redButton);
                 pieChart.setBgdColor(R.color.redButtonPressed);
                 pieChart.invalidate();
@@ -72,7 +72,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                 if(total==0)
                     pieChart.setPercentage(0.f);
                 else
-                    pieChart.setPercentage(calculateStatistics.calculate(done,total)*100);
+                    pieChart.setPercentage(calculateStatistics.calculate(done,total));
                 pieChart.setColor(R.color.yellowButton);
                 pieChart.setBgdColor(R.color.yellowButtonPressed);
                 pieChart.invalidate();
@@ -91,7 +91,7 @@ public class StatisticActivity extends AppCompatActivity implements View.OnClick
                 if(total==0)
                     pieChart.setPercentage(0.f);
                 else
-                    pieChart.setPercentage(calculateStatistics.calculate(done,total)*100);
+                    pieChart.setPercentage(calculateStatistics.calculate(done,total));
                 pieChart.setColor(R.color.greenButton);
                 pieChart.setBgdColor(R.color.greenButtonPressed);
                 pieChart.invalidate();
